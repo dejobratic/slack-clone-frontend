@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useRef } from "react"
 import * as signalR from "@microsoft/signalr"
 
-import ChatWindow from "ChatWindow"
-import ChatInput from "ChatInput"
+import ChatWindow from "app/ChatWindow"
+import ChatInput from "app/ChatInput"
 
 const Chat = () => {
   const [chat, setChat] = useState([])

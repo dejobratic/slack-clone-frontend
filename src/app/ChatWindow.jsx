@@ -1,6 +1,6 @@
 import React from "react"
 
-import ChatMessage from "ChatMessage"
+import ChatMessage from "app/ChatMessage"
 
 const ChatWindow = (props) => {
   const chat = props.chat.map((m) => (

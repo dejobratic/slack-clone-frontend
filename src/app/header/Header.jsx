@@ -9,7 +9,7 @@ import {
   SearchIcon,
   HeaderRightPane,
   HelpIcon,
-} from "header/HeaderStyles"
+} from "app/header/Header.Styled"
 
 const Header = () => {
   return (
