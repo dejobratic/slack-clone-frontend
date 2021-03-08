@@ -1,9 +1,8 @@
 import React from "react"
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom"
+import styled from "styled-components"
 
-import { AppBody } from "app/App.Styled"
-
-import Chat from "app/Chat"
+import Chat from "app/chat/Chat"
 import Header from "app/header/Header"
 import Sidebar from "app/sidebar/Sidebar"
 
@@ -16,7 +15,9 @@ const App = () => {
           <AppBody>
             <Sidebar />
             <Switch>
-              <Route exact path="/"></Route>
+              <Route exact path="/">
+                <Chat />
+              </Route>
             </Switch>
           </AppBody>
         </>
@@ -26,3 +27,9 @@ const App = () => {
 }
 
 export default App
+
+export const AppBody = styled.div`
+  display: flex;
+  height: 100vh;
+  width: 100%;
+`
