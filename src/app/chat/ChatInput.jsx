@@ -3,20 +3,30 @@ import styled from "styled-components"
 
 import { Button } from "@material-ui/core"
 
-const ChatInput = ({ chatRef, channelId, channelName }) => {
+const ChatInput = ({ channelId, channelName }) => {
   const [text, setText] = useState("")
 
-  const sendChatMessage = (e) => {
+  const addMessage = (e) => {
     e.preventDefault()
 
-    if (!text) return false
+    if (text) {
+      sendMessage(text)
+      setText("")
+    }
+  }
 
-    setText("")
-
-    // TODO: refactor
-    chatRef?.current?.scrollIntoView({
-      behavior: "smooth",
-    })
+  const sendMessage = async (text) => {
+    try {
+      await fetch("https://localhost:44387/chat/messages", {
+        method: "POST",
+        body: JSON.stringify({ text }),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
+    } catch (e) {
+      console.log("Sending message failed.", e)
+    }
   }
 
   return (
@@ -27,7 +37,7 @@ const ChatInput = ({ chatRef, channelId, channelName }) => {
           placeholder={`Message #${channelName}`}
           onChange={(e) => setText(e.target.value)}
         />
-        <Button hidden type="submit" onClick={sendChatMessage}>
+        <Button hidden type="submit" onClick={addMessage}>
           SEND
         </Button>
       </form>

@@ -1,36 +1,48 @@
-import React, { useRef, useEffect } from "react"
+import React, { useState, useRef, useEffect } from "react"
 import styled from "styled-components"
+import * as signalR from "@microsoft/signalr"
 
 import ChatHeader from "app/chat/ChatHeader"
 import ChatMessageList from "app/chat/ChatMessageList"
 import ChatInput from "app/chat/ChatInput"
 
 const Chat = () => {
-  const messages = [
-    {
-      text: "Hellloooooo!",
-      user: {
-        name: "Dejan Bratic",
-        image:
-          "https://www.kindpng.com/picc/m/78-786207_user-avatar-png-user-avatar-icon-png-transparent.png",
-      },
-    },
-  ]
+  const [messages, setMessages] = useState([])
 
   const chatRef = useRef(null)
+  chatRef.current = messages
 
   useEffect(() => {
-    chatRef?.current?.scrollIntoView({
-      behavior: "smooth",
-    })
+    const connection = new signalR.HubConnectionBuilder()
+      .withUrl("http://localhost:49883/hubs/chat")
+      .withAutomaticReconnect()
+      .build()
+
+    connection
+      .start()
+      .then((result) => {
+        console.log("Connected!")
+
+        connection.on("ReceiveMessage", (message) => {
+          setMessages([...chatRef.current, message])
+          console.log(messages)
+        })
+      })
+      .catch((e) => console.log("Connection failed: ", e))
   }, [])
+
+  // useEffect(() => {
+  //   chatRef?.current?.scrollIntoView({
+  //     behavior: "smooth",
+  //   })
+  // }, [])
 
   return (
     <ChatContainer>
       <>
         <ChatHeader channelName="ROOM" />
         <ChatMessageList chatRef={chatRef} messages={messages} />
-        <ChatInput chatRef={chatRef} channelName="ROOM" />
+        <ChatInput channelName="ROOM" />
       </>
     </ChatContainer>
   )
