@@ -3,7 +3,9 @@ import styled from "styled-components"
 
 import { Button } from "@material-ui/core"
 
-const ChatInput = ({ channelId, channelName }) => {
+import { chatService } from "services/ChatService"
+
+const ChatInput = ({ channelId, channelName, chatRef }) => {
   const [text, setText] = useState("")
 
   const addMessage = (e) => {
@@ -12,18 +14,15 @@ const ChatInput = ({ channelId, channelName }) => {
     if (text) {
       sendMessage(text)
       setText("")
+      // chatRef?.current?.scrollIntoView({
+      //   behavior: "smooth",
+      // })
     }
   }
 
   const sendMessage = async (text) => {
     try {
-      await fetch("https://localhost:44387/chat/messages", {
-        method: "POST",
-        body: JSON.stringify({ text }),
-        headers: {
-          "Content-Type": "application/json",
-        },
-      })
+      await chatService.sendMessage(text)
     } catch (e) {
       console.log("Sending message failed.", e)
     }
@@ -58,7 +57,7 @@ const ChatInputContainer = styled.div`
 
   > form > input {
     position: fixed;
-    bottom: 30px;
+    bottom: 20px;
     width: 60%;
     border-radius: 3px;
     padding: 20px;

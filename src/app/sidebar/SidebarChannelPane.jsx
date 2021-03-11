@@ -6,18 +6,16 @@ import ExpandMoreIcon from "@material-ui/icons/ExpandMore"
 import SidebarOption from "app/sidebar/SidebarMenuOption"
 import SidebarChannel from "app/sidebar/SidebarChannel"
 
-import useSignalRConnection from "app/hooks/useSignalRConnection"
+import useSignalRConnection from "hooks/useSignalRConnection"
+
+import { channelService } from "services/ChannelService"
 
 const SidebarChannelPane = () => {
   const [channels, setChannels] = useState([])
 
-  const chatRef = useRef(null)
-  chatRef.current = channels
-
-  useSignalRConnection("http://localhost:49883/hubs/chat", (connection) => {
+  useSignalRConnection(process.env.REACT_APP_CHANNEL_HUB_URL, (connection) => {
     connection.on("CreateChannel", (channel) => {
-      setChannels([...chatRef.current, channel])
-      console.log(channels)
+      setChannels([...channels, channel])
     })
   })
 
@@ -30,13 +28,7 @@ const SidebarChannelPane = () => {
 
   const createChannel = async (channelName) => {
     try {
-      await fetch("https://localhost:44387/chat/channels", {
-        method: "POST",
-        body: JSON.stringify({ channelName }),
-        headers: {
-          "Content-Type": "application/json",
-        },
-      })
+      await channelService.createChannel(channelName)
     } catch (e) {
       console.log("Unable to create channel.", e)
     }

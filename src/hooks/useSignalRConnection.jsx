@@ -15,6 +15,15 @@ const useSignalRConnection = (url, callback) => {
         callback(connection)
       })
       .catch((e) => console.log("Connection failed: ", e))
+
+    return () => {
+      connection
+        .stop()
+        .then((result) => {
+          console.log("Stopped!")
+        })
+        .catch((e) => console.log("Stopping failed: ", e))
+    }
   }, [url, callback])
 }
 
