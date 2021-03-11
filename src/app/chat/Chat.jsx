@@ -21,14 +21,14 @@ const Chat = () => {
     chatRef?.current?.scrollIntoView({
       behavior: "smooth",
     })
-  }, [])
+  }, [messages])
 
   return (
     <ChatContainer>
       <>
         <ChatHeader channelName="ROOM" />
         <ChatMessageList chatRef={chatRef} messages={messages} />
-        <ChatInput chatRef={chatRef} channelName="ROOM" />
+        <ChatInput channelName="ROOM" />
       </>
     </ChatContainer>
   )
@@ -41,5 +41,5 @@ const ChatContainer = styled.div`
   flex-grow: 1;
   overflow-y: scroll;
   margin-top: 45px;
-  margin-bottom: 100px;
+  /* margin-bottom: 100px; */
 `

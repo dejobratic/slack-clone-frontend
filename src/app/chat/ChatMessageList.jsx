@@ -18,4 +18,6 @@ export default ChatMessageList
 
 const ChatMessageListContainer = styled.div``
 
-const ChatBottom = styled.div``
+const ChatBottom = styled.div`
+  padding-bottom: 80px;
+`

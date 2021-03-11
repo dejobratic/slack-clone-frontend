@@ -5,7 +5,7 @@ import { Button } from "@material-ui/core"
 
 import { chatService } from "services/ChatService"
 
-const ChatInput = ({ channelId, channelName, chatRef }) => {
+const ChatInput = ({ channelId, channelName }) => {
   const [text, setText] = useState("")
 
   const addMessage = (e) => {
@@ -14,9 +14,6 @@ const ChatInput = ({ channelId, channelName, chatRef }) => {
     if (text) {
       sendMessage(text)
       setText("")
-      // chatRef?.current?.scrollIntoView({
-      //   behavior: "smooth",
-      // })
     }
   }
 
