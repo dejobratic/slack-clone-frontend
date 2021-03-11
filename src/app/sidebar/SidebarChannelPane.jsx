@@ -1,5 +1,4 @@
-import React, { useState, useRef, useEffect } from "react"
-import * as signalR from "@microsoft/signalr"
+import React, { useState, useRef } from "react"
 
 import AddIcon from "@material-ui/icons/Add"
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore"
@@ -7,30 +6,20 @@ import ExpandMoreIcon from "@material-ui/icons/ExpandMore"
 import SidebarOption from "app/sidebar/SidebarMenuOption"
 import SidebarChannel from "app/sidebar/SidebarChannel"
 
+import useSignalRConnection from "app/hooks/useSignalRConnection"
+
 const SidebarChannelPane = () => {
   const [channels, setChannels] = useState([])
 
   const chatRef = useRef(null)
   chatRef.current = channels
 
-  useEffect(() => {
-    const connection = new signalR.HubConnectionBuilder()
-      .withUrl("http://localhost:49883/hubs/chat")
-      .withAutomaticReconnect()
-      .build()
-
-    connection
-      .start()
-      .then((result) => {
-        console.log("Connected!")
-
-        connection.on("CreateChannel", (channel) => {
-          setChannels([...chatRef.current, channel])
-          console.log(channels)
-        })
-      })
-      .catch((e) => console.log("Connection failed: ", e))
-  }, [])
+  useSignalRConnection("http://localhost:49883/hubs/chat", (connection) => {
+    connection.on("CreateChannel", (channel) => {
+      setChannels([...chatRef.current, channel])
+      console.log(channels)
+    })
+  })
 
   const addChannel = async () => {
     const channelName = prompt("Please enter the channel name.")

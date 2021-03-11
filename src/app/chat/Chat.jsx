@@ -1,10 +1,11 @@
-import React, { useState, useRef, useEffect } from "react"
+import React, { useState, useRef } from "react"
 import styled from "styled-components"
-import * as signalR from "@microsoft/signalr"
 
 import ChatHeader from "app/chat/ChatHeader"
 import ChatMessageList from "app/chat/ChatMessageList"
 import ChatInput from "app/chat/ChatInput"
+
+import useSignalRConnection from "app/hooks/useSignalRConnection"
 
 const Chat = () => {
   const [messages, setMessages] = useState([])
@@ -12,24 +13,12 @@ const Chat = () => {
   const chatRef = useRef(null)
   chatRef.current = messages
 
-  useEffect(() => {
-    const connection = new signalR.HubConnectionBuilder()
-      .withUrl("http://localhost:49883/hubs/chat")
-      .withAutomaticReconnect()
-      .build()
-
-    connection
-      .start()
-      .then((result) => {
-        console.log("Connected!")
-
-        connection.on("ReceiveMessage", (message) => {
-          setMessages([...chatRef.current, message])
-          console.log(messages)
-        })
-      })
-      .catch((e) => console.log("Connection failed: ", e))
-  }, [])
+  useSignalRConnection("http://localhost:49883/hubs/chat", (connection) => {
+    connection.on("ReceiveMessage", (message) => {
+      setMessages([...chatRef.current, message])
+      console.log(messages)
+    })
+  })
 
   // useEffect(() => {
   //   chatRef?.current?.scrollIntoView({

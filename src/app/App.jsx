@@ -6,7 +6,17 @@ import Chat from "app/chat/Chat"
 import Header from "app/header/Header"
 import Sidebar from "app/sidebar/Sidebar"
 
+import useSignalRConnection from "app/hooks/useSignalRConnection"
+
 const App = () => {
+  useSignalRConnection("http://localhost:49883/hubs/chat", (connection) => {
+    // connection.on("ReceiveMessage", (message) => {
+    //   setMessages([...chatRef.current, message])
+    //   console.log(messages)
+    // })
+    console.log(connection)
+  })
+
   return (
     <div className="app">
       <Router>
