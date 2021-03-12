@@ -1,7 +1,7 @@
 import React from "react"
 import styled from "styled-components"
 
-const SidebarChannel = ({ title }) => {
+const SidebarChannel = ({ id, name }) => {
   const openChannel = () => {
     console.log("open channel")
   }
@@ -10,7 +10,7 @@ const SidebarChannel = ({ title }) => {
     <SidebarChannelContainer onClick={openChannel}>
       <h3>
         <span>#</span>
-        {title}
+        {name}
       </h3>
     </SidebarChannelContainer>
   )

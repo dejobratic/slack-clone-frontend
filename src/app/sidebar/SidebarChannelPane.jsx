@@ -1,4 +1,5 @@
-import React, { useState, useRef } from "react"
+import React, { useState } from "react"
+import { useDispatch } from "react-redux"
 
 import AddIcon from "@material-ui/icons/Add"
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore"
@@ -8,9 +9,10 @@ import SidebarChannel from "app/sidebar/SidebarChannel"
 
 import useSignalRConnection from "hooks/useSignalRConnection"
 
-import { channelService } from "services/ChannelService"
+import { addChannel } from "redux/channel/actions"
 
 const SidebarChannelPane = () => {
+  const dispatch = useDispatch()
   const [channels, setChannels] = useState([])
 
   useSignalRConnection(process.env.REACT_APP_CHANNEL_HUB_URL, (connection) => {
@@ -19,18 +21,10 @@ const SidebarChannelPane = () => {
     })
   })
 
-  const addChannel = async () => {
+  const handleAddChannel = () => {
     const channelName = prompt("Please enter the channel name.")
     if (channelName) {
-      await createChannel(channelName)
-    }
-  }
-
-  const createChannel = async (channelName) => {
-    try {
-      await channelService.createChannel(channelName)
-    } catch (e) {
-      console.log("Unable to create channel.", e)
+      dispatch(addChannel(channelName))
     }
   }
 
@@ -38,9 +32,13 @@ const SidebarChannelPane = () => {
     <>
       <SidebarOption Icon={ExpandMoreIcon} title="Channels" />
       <hr />
-      <SidebarOption Icon={AddIcon} title="Add channel" onClick={addChannel} />
+      <SidebarOption
+        Icon={AddIcon}
+        title="Add channel"
+        onClick={handleAddChannel}
+      />
       {channels.map((channel) => (
-        <SidebarChannel key={channel.id} title={channel.name} />
+        <SidebarChannel key={channel.id} {...channel} />
       ))}
     </>
   )

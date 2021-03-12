@@ -1,27 +1,21 @@
 import React, { useState } from "react"
+import { useDispatch } from "react-redux"
 import styled from "styled-components"
 
 import { Button } from "@material-ui/core"
 
-import { chatService } from "services/ChatService"
+import { sendMessage } from "redux/chat/actions"
 
 const ChatInput = ({ channelId, channelName }) => {
+  const dispatch = useDispatch()
   const [text, setText] = useState("")
 
-  const addMessage = (e) => {
+  const handleSendMessage = (e) => {
     e.preventDefault()
 
     if (text) {
-      sendMessage(text)
+      dispatch(sendMessage(text))
       setText("")
-    }
-  }
-
-  const sendMessage = async (text) => {
-    try {
-      await chatService.sendMessage(text)
-    } catch (e) {
-      console.log("Sending message failed.", e)
     }
   }
 
@@ -33,7 +27,7 @@ const ChatInput = ({ channelId, channelName }) => {
           placeholder={`Message #${channelName}`}
           onChange={(e) => setText(e.target.value)}
         />
-        <Button hidden type="submit" onClick={addMessage}>
+        <Button hidden type="submit" onClick={handleSendMessage}>
           SEND
         </Button>
       </form>
