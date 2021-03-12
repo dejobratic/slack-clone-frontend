@@ -18,7 +18,7 @@ function* sendMessage({ payload: text }) {
 }
 
 function* onSendMessageStart() {
-  yield takeLatest(chatAction.ADD_CHANNEL_START, sendMessage)
+  yield takeLatest(chatAction.SEND_MESSAGE_START, sendMessage)
 }
 
 export default function* chatSagas() {
