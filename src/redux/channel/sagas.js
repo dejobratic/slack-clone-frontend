@@ -10,8 +10,8 @@ import { channelService } from "services/ChannelService"
 
 function* addChannel({ payload: channelName }) {
   try {
-    const channel = yield channelService.createChannel(channelName)
-    yield put(addChannelSuccess(channel))
+    yield channelService.createChannel(channelName)
+    yield put(addChannelSuccess())
   } catch (error) {
     yield put(addChannelFailure(error.message))
   }

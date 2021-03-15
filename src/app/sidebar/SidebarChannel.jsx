@@ -1,13 +1,18 @@
 import React from "react"
+import { useDispatch } from "react-redux"
 import styled from "styled-components"
 
+import { openChannel } from "redux/channel/actions"
+
 const SidebarChannel = ({ id, name }) => {
-  const openChannel = () => {
-    console.log("open channel")
+  const dispatch = useDispatch()
+
+  const handleOpenChannel = () => {
+    dispatch(openChannel({ id, name }))
   }
 
   return (
-    <SidebarChannelContainer onClick={openChannel}>
+    <SidebarChannelContainer onClick={handleOpenChannel}>
       <h3>
         <span>#</span>
         {name}

@@ -9,7 +9,7 @@ import SidebarChannel from "app/sidebar/SidebarChannel"
 
 import useSignalRConnection from "hooks/useSignalRConnection"
 
-import { addChannel } from "redux/channel/actions"
+import { addChannel, openChannel } from "redux/channel/actions"
 
 const SidebarChannelPane = () => {
   const dispatch = useDispatch()
@@ -18,6 +18,7 @@ const SidebarChannelPane = () => {
   useSignalRConnection(process.env.REACT_APP_CHANNEL_HUB_URL, (connection) => {
     connection.on("CreateChannel", (channel) => {
       setChannels([...channels, channel])
+      dispatch(openChannel(channel))
     })
   })
 

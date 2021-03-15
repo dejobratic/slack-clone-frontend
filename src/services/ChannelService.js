@@ -1,11 +1,9 @@
+import { httpService } from "services/HttpService"
+
 class ChannelService {
   async createChannel(channelName) {
-    await fetch(process.env.REACT_APP_CHANNEL_URL, {
-      method: "POST",
-      body: JSON.stringify({ channelName }),
-      headers: {
-        "Content-Type": "application/json",
-      },
+    return await httpService.post(process.env.REACT_APP_CHANNEL_URL, {
+      channelName,
     })
   }
 }

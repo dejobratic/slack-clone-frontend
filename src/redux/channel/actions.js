@@ -2,6 +2,8 @@ export const channelAction = {
   ADD_CHANNEL_START: "ADD_CHANNEL_START",
   ADD_CHANNEL_SUCCESS: "ADD_CHANNEL_SUCCESS",
   ADD_CHANNEL_FAILURE: "ADD_CHANNEL_FAILURE",
+
+  OPEN_CHANNEL: "OPEN_CHANNEL",
 }
 
 export const addChannel = (channelName) => ({
@@ -9,12 +11,16 @@ export const addChannel = (channelName) => ({
   payload: channelName,
 })
 
-export const addChannelSuccess = (channel) => ({
+export const addChannelSuccess = () => ({
   type: channelAction.ADD_CHANNEL_SUCCESS,
-  payload: channel,
 })
 
 export const addChannelFailure = (errorMessage) => ({
   type: channelAction.ADD_CHANNEL_FAILURE,
   payload: errorMessage,
+})
+
+export const openChannel = (channel) => ({
+  type: channelAction.OPEN_CHANNEL,
+  payload: channel,
 })

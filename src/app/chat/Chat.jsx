@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useRef } from "react"
+import { useSelector } from "react-redux"
 import styled from "styled-components"
 
 import ChatHeader from "app/chat/ChatHeader"
@@ -7,7 +8,11 @@ import ChatInput from "app/chat/ChatInput"
 
 import useSignalRConnection from "hooks/useSignalRConnection"
 
+import { selectCurrentChannel } from "redux/channel/selectors"
+
 const Chat = () => {
+  const channel = useSelector(selectCurrentChannel)
+
   const chatRef = useRef(null)
   const [messages, setMessages] = useState([])
 
@@ -25,11 +30,13 @@ const Chat = () => {
 
   return (
     <ChatContainer>
-      <>
-        <ChatHeader channelName="ROOM" />
-        <ChatMessageList chatRef={chatRef} messages={messages} />
-        <ChatInput channelName="ROOM" />
-      </>
+      {channel && (
+        <>
+          <ChatHeader channelName={channel.name} />
+          <ChatMessageList chatRef={chatRef} messages={messages} />
+          <ChatInput channelName={channel.name} />
+        </>
+      )}
     </ChatContainer>
   )
 }
@@ -41,5 +48,4 @@ const ChatContainer = styled.div`
   flex-grow: 1;
   overflow-y: scroll;
   margin-top: 45px;
-  /* margin-bottom: 100px; */
 `
