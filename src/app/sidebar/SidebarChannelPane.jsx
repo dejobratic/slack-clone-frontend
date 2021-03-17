@@ -1,5 +1,5 @@
-import React, { useState } from "react"
-import { useDispatch } from "react-redux"
+import React from "react"
+import { useDispatch, useSelector } from "react-redux"
 
 import AddIcon from "@material-ui/icons/Add"
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore"
@@ -9,15 +9,16 @@ import SidebarChannel from "app/sidebar/SidebarChannel"
 
 import useSignalRConnection from "hooks/useSignalRConnection"
 
-import { addChannel, openChannel } from "redux/channel/actions"
+import { createChannel, addChannel, openChannel } from "redux/channel/actions"
+import { selectAllChannels } from "redux/channel/selectors"
 
 const SidebarChannelPane = () => {
   const dispatch = useDispatch()
-  const [channels, setChannels] = useState([])
+  const channels = useSelector(selectAllChannels)
 
   useSignalRConnection(process.env.REACT_APP_CHANNEL_HUB_URL, (connection) => {
     connection.on("CreateChannel", (channel) => {
-      setChannels([...channels, channel])
+      dispatch(addChannel(channel))
       dispatch(openChannel(channel))
     })
   })
@@ -25,7 +26,7 @@ const SidebarChannelPane = () => {
   const handleAddChannel = () => {
     const channelName = prompt("Please enter the channel name.")
     if (channelName) {
-      dispatch(addChannel(channelName))
+      dispatch(createChannel(channelName))
     }
   }
 

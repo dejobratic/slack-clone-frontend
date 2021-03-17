@@ -2,25 +2,40 @@ import { takeLatest, put, all, call } from "redux-saga/effects"
 
 import {
   channelAction,
-  addChannelSuccess,
-  addChannelFailure,
+  getAllChannelsSuccess,
+  getAllChannelsFailure,
+  createChannelSuccess,
+  createChannelFailure,
 } from "redux/channel/actions"
 
 import { channelService } from "services/ChannelService"
 
-function* addChannel({ payload: channelName }) {
+function* getAllChannels() {
   try {
-    yield channelService.createChannel(channelName)
-    yield put(addChannelSuccess())
+    const channels = yield channelService.getAll()
+    yield put(getAllChannelsSuccess(channels))
   } catch (error) {
-    yield put(addChannelFailure(error.message))
+    yield put(getAllChannelsFailure(error.message))
   }
 }
 
-function* onAddChannelStart() {
-  yield takeLatest(channelAction.ADD_CHANNEL_START, addChannel)
+function* createChannel({ payload: channelName }) {
+  try {
+    yield channelService.create(channelName)
+    yield put(createChannelSuccess())
+  } catch (error) {
+    yield put(createChannelFailure(error.message))
+  }
+}
+
+function* onGetAllChannelsStart() {
+  yield takeLatest(channelAction.GET_ALL_CHANNELS_START, getAllChannels)
+}
+
+function* onCreateChannelStart() {
+  yield takeLatest(channelAction.CREATE_CHANNEL_START, createChannel)
 }
 
 export default function* channelSagas() {
-  yield all([call(onAddChannelStart)])
+  yield all([call(onCreateChannelStart), call(onGetAllChannelsStart)])
 }

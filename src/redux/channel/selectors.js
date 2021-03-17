@@ -1,6 +1,11 @@
 import { createSelector } from "reselect"
 
-const selectChannel = (state) => state.channel
+export const selectChannel = (state) => state.channel
+
+export const selectAllChannels = createSelector(
+  selectChannel,
+  (channel) => channel.all
+)
 
 export const selectCurrentChannel = createSelector(
   selectChannel,
