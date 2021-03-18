@@ -14,7 +14,7 @@ const ChatInput = ({ channelId, channelName }) => {
     e.preventDefault()
 
     if (text) {
-      dispatch(sendMessage(text))
+      dispatch(sendMessage({ text, channelId }))
       setText("")
     }
   }

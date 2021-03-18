@@ -1,7 +1,9 @@
 import { chatAction } from "redux/chat/actions"
 
 const INITIAL_STATE = {
+  messages: [],
   errorMessage: null,
+  loading: false,
 }
 
 const chatReducer = (state = INITIAL_STATE, action) => {
@@ -10,8 +12,18 @@ const chatReducer = (state = INITIAL_STATE, action) => {
     case chatAction.SEND_MESSAGE_SUCCESS:
       return { ...state, errorMessage: null }
 
+    case chatAction.GET_MESSAGES_START:
+      return { ...state, loading: true }
+
+    case chatAction.GET_MESSAGES_SUCCESS:
+      return { ...state, messages: action.payload, loading: false }
+
     case chatAction.SEND_MESSAGE_FAILURE:
+    case chatAction.GET_MESSAGES_FAILURE:
       return { ...state, errorMessage: action.payload }
+
+    case chatAction.ADD_MESSAGE:
+      return { ...state, messages: [...state.messages, action.payload] }
 
     default:
       return state

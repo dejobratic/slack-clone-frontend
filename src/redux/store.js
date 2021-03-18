@@ -6,11 +6,11 @@ import rootReducer from "redux/root-reducer"
 import rootSaga from "redux/root-saga"
 
 const sagaMiddleware = createSagaMiddleware()
-const middlewares = [sagaMiddleware]
+const allMiddleware = [sagaMiddleware]
 
 const store = createStore(
   rootReducer,
-  composeWithDevTools(applyMiddleware(...middlewares))
+  composeWithDevTools(applyMiddleware(...allMiddleware))
 )
 
 sagaMiddleware.run(rootSaga)

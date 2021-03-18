@@ -1,26 +1,12 @@
-import React, { useEffect, useState, useRef } from "react"
-import { useSelector } from "react-redux"
+import React, { useEffect, useRef } from "react"
 import styled from "styled-components"
 
 import ChatHeader from "app/chat/ChatHeader"
-import ChatMessageList from "app/chat/ChatMessageList"
+import ChatMessage from "app/chat/ChatMessage"
 import ChatInput from "app/chat/ChatInput"
 
-import useSignalRConnection from "hooks/useSignalRConnection"
-
-import { selectCurrentChannel } from "redux/channel/selectors"
-
-const Chat = () => {
-  const channel = useSelector(selectCurrentChannel)
-
+const Chat = ({ channel, messages }) => {
   const chatRef = useRef(null)
-  const [messages, setMessages] = useState([])
-
-  useSignalRConnection(process.env.REACT_APP_CHAT_HUB_URL, (connection) => {
-    connection.on("ReceiveMessage", (message) => {
-      setMessages([...messages, message])
-    })
-  })
 
   useEffect(() => {
     chatRef?.current?.scrollIntoView({
@@ -30,13 +16,14 @@ const Chat = () => {
 
   return (
     <ChatContainer>
-      {channel && (
-        <>
-          <ChatHeader channelName={channel.name} />
-          <ChatMessageList chatRef={chatRef} messages={messages} />
-          <ChatInput channelName={channel.name} />
-        </>
-      )}
+      <ChatHeader channelName={channel.name} />
+      <ChatMessageListContainer>
+        {messages.map((message) => (
+          <ChatMessage key={message.id} {...message} />
+        ))}
+        <ChatBottom ref={chatRef} />
+      </ChatMessageListContainer>
+      <ChatInput channelId={channel.id} channelName={channel.name} />
     </ChatContainer>
   )
 }
@@ -48,4 +35,9 @@ const ChatContainer = styled.div`
   flex-grow: 1;
   overflow-y: scroll;
   margin-top: 45px;
+`
+const ChatMessageListContainer = styled.div``
+
+const ChatBottom = styled.div`
+  padding-bottom: 80px;
 `

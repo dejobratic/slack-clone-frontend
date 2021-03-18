@@ -1,30 +1,17 @@
 import { useEffect } from "react"
-import * as signalR from "@microsoft/signalr"
 
-const useSignalRConnection = (url, callback) => {
+import connection from "utils/signalRConnection"
+
+const useSignalRConnection = (event, callback) => {
   useEffect(() => {
-    const connection = new signalR.HubConnectionBuilder()
-      .withUrl(url)
-      .withAutomaticReconnect()
-      .build()
-
-    connection
-      .start()
-      .then((result) => {
-        console.log("Connected!")
-        callback(connection)
-      })
-      .catch((e) => console.log("Connection failed: ", e))
+    connection.on(event, callback)
+    console.log(`Subscribed to event: ${event}`)
 
     return () => {
-      connection
-        .stop()
-        .then((result) => {
-          console.log("Stopped!")
-        })
-        .catch((e) => console.log("Stopping failed: ", e))
+      connection.off(event, callback)
+      console.log(`Unsubscribed from event: ${event}`)
     }
-  }, [url, callback])
+  }, [event, callback])
 }
 
 export default useSignalRConnection

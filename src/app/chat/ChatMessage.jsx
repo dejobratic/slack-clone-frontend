@@ -1,13 +1,13 @@
 import React from "react"
 import styled from "styled-components"
 
-const ChatMessage = ({ text, timestamp, user }) => {
+const ChatMessage = ({ text, createdAt, creator }) => {
   return (
     <ChatMessageContainer>
-      <img src={user.image} alt={user.name} />
+      <img src={creator.imageUrl} alt={creator.name} />
       <ChatMessageBody>
         <h4>
-          {user.name} <span>{new Date().toUTCString()}</span>
+          {creator.name} <span>{new Date(createdAt).toUTCString()}</span>
         </h4>
         <p>{text}</p>
       </ChatMessageBody>
