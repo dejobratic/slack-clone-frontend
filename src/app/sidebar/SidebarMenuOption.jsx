@@ -13,6 +13,7 @@ const SidebarMenuOption = ({ Icon, title, onClick }) => {
 export default SidebarMenuOption
 
 const SidebarMenuOptionContainer = styled.div`
+  color: var(--text-color-darker);
   display: flex;
   font-size: 12px;
   align-items: center;
@@ -21,7 +22,7 @@ const SidebarMenuOptionContainer = styled.div`
 
   :hover {
     opacity: 0.9;
-    background-color: #340e36;
+    background-color: var(--slack-color-darker);
   }
 
   > h3 {

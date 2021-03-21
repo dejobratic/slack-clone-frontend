@@ -8,11 +8,15 @@ import SidebarOption from "app/sidebar/SidebarMenuOption"
 import SidebarChannel from "app/sidebar/SidebarChannel"
 
 import { getAllChannels, createChannel } from "redux/channel/actions"
-import { selectAllChannels } from "redux/channel/selectors"
+import {
+  selectAllChannels,
+  selectCurrentChannel,
+} from "redux/channel/selectors"
 
 const SidebarChannelPane = () => {
   const dispatch = useDispatch()
   const channels = useSelector(selectAllChannels)
+  const currentChannel = useSelector(selectCurrentChannel)
 
   useEffect(() => {
     dispatch(getAllChannels())
@@ -35,7 +39,11 @@ const SidebarChannelPane = () => {
         onClick={handleCreateChannel}
       />
       {channels.map((channel) => (
-        <SidebarChannel key={channel.id} {...channel} />
+        <SidebarChannel
+          key={channel.id}
+          {...channel}
+          selected={currentChannel?.id === channel.id}
+        />
       ))}
     </>
   )

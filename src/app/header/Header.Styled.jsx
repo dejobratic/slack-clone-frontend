@@ -12,7 +12,7 @@ export const HeaderContainer = styled.header`
   align-items: center;
   justify-content: space-between;
   padding: 10px 0;
-  background-color: var(--slack-color);
+  background-color: var(--slack-color-darker);
   color: white;
 `
 
@@ -48,7 +48,7 @@ export const HeaderCenterPane = styled.div`
   flex: 0.4;
   opacity: 1;
   border-radius: 6px;
-  background-color: #421f44;
+  background-color: var(--slack-color);
   text-align: center;
   display: flex;
   padding: 0 50px;

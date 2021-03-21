@@ -3,7 +3,16 @@
 }
 
 body {
-  --slack-color: #3f0f40;
+  --slack-color: #3f0e40;
+  --slack-color-lighter: #49274b;
+  --slack-color-darker: #350d36;
+
+  --text-color: #ffffff;
+  --text-color-darker: #a690a7;
+
+  --active-item-color: #1164a3;
+  --active-presence-color: #2bac76;
+
   overflow: hidden;
 
   margin: 0;

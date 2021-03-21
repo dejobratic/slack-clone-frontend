@@ -50,9 +50,13 @@ const ChatInputContainer = styled.div`
     position: fixed;
     bottom: 20px;
     width: 60%;
-    border-radius: 3px;
+    border-radius: 1px var(--slack-color);
     padding: 20px;
     outline: none;
+  }
+
+  > form > input::placeholder {
+    color: var(--text-color-darker);
   }
 
   > form > button {

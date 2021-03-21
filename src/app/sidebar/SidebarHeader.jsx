@@ -23,7 +23,7 @@ export default SidebarHeader
 
 const SidebarHeaderContainer = styled.div`
   display: flex;
-  border-bottom: 1px solid #49274b;
+  border-bottom: 1px solid var(--slack-color-lighter);
   padding: 13px;
 
   > .MuiSvgIcon-root {
@@ -55,6 +55,6 @@ const SidebarHeaderInfo = styled.div`
     font-size: 14px;
     margin-top: 1px;
     margin-right: 2px;
-    color: green;
+    color: var(--active-presence-color);
   }
 `
