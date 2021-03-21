@@ -3,7 +3,7 @@ import styled from "styled-components"
 
 import SidebarHeader from "app/sidebar/SidebarHeader"
 import SidebarMenu from "app/sidebar/SidebarMenu"
-import { default as SidebarChannelPane } from "app/sidebar/SidebarChannelPaneContainer"
+import SidebarChannelPane from "app/sidebar/SidebarChannelPane"
 
 const Sidebar = () => {
   return (

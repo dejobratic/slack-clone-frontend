@@ -4,7 +4,7 @@ const INITIAL_STATE = {
   all: [],
   current: null,
   errorMessage: null,
-  loading: true,
+  loading: false,
 }
 
 const channelReducer = (state = INITIAL_STATE, action) => {
@@ -20,14 +20,14 @@ const channelReducer = (state = INITIAL_STATE, action) => {
         all: action.payload,
       }
 
-    case channelAction.CREATE_CHANNEL_START:
+    case channelAction.CREATE_NEW_CHANNEL_START:
       return { ...state, errorMessage: null, loading: true }
 
-    case channelAction.CREATE_CHANNEL_SUCCESS:
+    case channelAction.CREATE_NEW_CHANNEL_SUCCESS:
       return { ...state, errorMessage: null, loading: false }
 
     case channelAction.GET_ALL_CHANNELS_FAILURE:
-    case channelAction.CREATE_CHANNEL_FAILURE:
+    case channelAction.CREATE_NEW_CHANNEL_FAILURE:
       return {
         ...state,
         errorMessage: action.payload,

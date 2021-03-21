@@ -9,10 +9,6 @@ class MessageService {
 
     return await httpService.get(url)
   }
-
-  async sendMessage(message) {
-    await httpService.post(baseUrl, message)
-  }
 }
 
 export const messageService = new MessageService()

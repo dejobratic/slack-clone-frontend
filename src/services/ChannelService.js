@@ -6,12 +6,6 @@ class ChannelService {
   async getAll() {
     return await httpService.get(baseUrl)
   }
-
-  async create(channelName) {
-    return await httpService.post(baseUrl, {
-      channelName,
-    })
-  }
 }
 
 export const channelService = new ChannelService()

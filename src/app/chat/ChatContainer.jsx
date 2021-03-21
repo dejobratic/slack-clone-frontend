@@ -3,9 +3,7 @@ import { useDispatch, useSelector } from "react-redux"
 
 import Chat from "app/chat/Chat"
 
-import useSignalRConnection from "hooks/useSignalRConnection"
-
-import { getMessages, addMessage } from "redux/chat/actions"
+import { getMessages } from "redux/chat/actions"
 import { selectChat } from "redux/chat/selectors"
 import { selectCurrentChannel } from "redux/channel/selectors"
 
@@ -22,13 +20,7 @@ const ChatContainer = () => {
       )
   }, [channel, dispatch])
 
-  useSignalRConnection("ReceiveMessage", (message) => {
-    dispatch(addMessage(message))
-  })
-
-  if (!channel) return <h1>Select a channel</h1>
-
-  if (loading) return <h1>...</h1>
+  if (!channel || loading) return <></>
 
   return <Chat channel={channel} messages={messages} />
 }
