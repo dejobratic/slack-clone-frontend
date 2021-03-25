@@ -18,7 +18,8 @@ const Sidebar = () => {
 export default Sidebar
 
 const SidebarContainer = styled.div`
-  flex: 0.3;
+  grid-column: 1;
+  grid-row: 1 / 4;
   color: var(--text-color);
   background-color: var(--slack-color);
   border-top: 1px solid var(--slack-color-lighter);

@@ -2,7 +2,11 @@ import React from "react"
 import styled from "styled-components"
 
 const ChatMessage = ({ text, createdAt, creator: user }) => {
-  const creator = user ?? { name: "Dejan Bratic", imageUrl: "" }
+  const creator = user ?? {
+    name: "Dejan Bratic",
+    imageUrl:
+      "https://www.kindpng.com/picc/m/78-786207_user-avatar-png-user-avatar-icon-png-transparent.png",
+  }
 
   return (
     <ChatMessageContainer>

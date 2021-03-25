@@ -38,7 +38,10 @@ const ChatInput = ({ channelId, channelName }) => {
 export default ChatInput
 
 const ChatInputContainer = styled.div`
-  border-radius: 20px;
+  grid-column: 2;
+  grid-row: 3;
+  padding-top: 5px;
+  padding-bottom: 15px;
 
   > form {
     position: relative;
@@ -47,9 +50,7 @@ const ChatInputContainer = styled.div`
   }
 
   > form > input {
-    position: fixed;
-    bottom: 20px;
-    width: 60%;
+    width: 90%;
     border-radius: 1px var(--slack-color);
     padding: 20px;
     outline: none;

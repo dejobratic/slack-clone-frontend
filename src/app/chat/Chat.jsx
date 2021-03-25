@@ -15,26 +15,25 @@ const Chat = ({ channel, messages }) => {
   }, [messages])
 
   return (
-    <ChatContainer>
+    <>
       <ChatHeader channelName={channel.name} />
-      <ChatMessageListContainer>
+      <ChatMessageList>
         {messages.map((message) => (
           <ChatMessage key={message.id} {...message} />
         ))}
         <ChatBottom ref={chatRef} />
-      </ChatMessageListContainer>
+      </ChatMessageList>
       <ChatInput channelId={channel.id} channelName={channel.name} />
-    </ChatContainer>
+    </>
   )
 }
 
 export default Chat
 
-const ChatContainer = styled.div`
-  flex: 0.7;
-  flex-grow: 1;
-  margin-top: 45px;
-  padding-right: 5px;
+const ChatMessageList = styled.div`
+  grid-column: 2;
+  grid-row: 2;
+  padding: 0 1em;
   overflow-y: scroll;
 
   /* Scrollbar Styling */
@@ -54,8 +53,5 @@ const ChatContainer = styled.div`
     background: #6d6d6d;
   }
 `
-const ChatMessageListContainer = styled.div``
 
-const ChatBottom = styled.div`
-  padding-bottom: 80px;
-`
+const ChatBottom = styled.div``

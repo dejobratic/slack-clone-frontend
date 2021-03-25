@@ -22,7 +22,8 @@ export default App
 const AppContainer = styled.div``
 
 const Body = styled.div`
-  display: flex;
+  display: grid;
   height: 100vh;
-  width: 100%;
+  grid-template-columns: 250px 1fr;
+  grid-template-rows: auto 1fr auto;
 `

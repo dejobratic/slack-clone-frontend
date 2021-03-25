@@ -25,9 +25,10 @@ const ChatHeader = ({ channelName }) => {
 export default ChatHeader
 
 const ChatHeaderContainer = styled.div`
-  display: flex;
-  justify-content: space-between;
+  grid-column: 2;
+  grid-row: 1;
   padding: 20px;
+  margin-top: 35px;
   border-bottom: 1px solid lightgray;
 `
 
