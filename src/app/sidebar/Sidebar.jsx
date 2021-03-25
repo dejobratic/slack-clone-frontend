@@ -1,16 +1,47 @@
-import React from "react"
+import React, { useEffect } from "react"
+import { useDispatch, useSelector } from "react-redux"
 import styled from "styled-components"
+
+import AddIcon from "@material-ui/icons/Add"
+import ExpandMoreIcon from "@material-ui/icons/ExpandMore"
 
 import SidebarHeader from "app/sidebar/SidebarHeader"
 import SidebarMenu from "app/sidebar/SidebarMenu"
-import SidebarChannelPane from "app/sidebar/SidebarChannelPane"
+import SidebarChannelList from "app/sidebar/SidebarChannelList"
+import SidebarItem from "app/sidebar/SidebarItem"
+
+import { getSubscribedChannels, createChannel } from "redux/channel/actions"
+import { selectAllChannels } from "redux/channel/selectors"
 
 const Sidebar = () => {
+  const dispatch = useDispatch()
+  const channels = useSelector(selectAllChannels)
+
+  useEffect(() => {
+    dispatch(getSubscribedChannels())
+  }, [dispatch])
+
+  const handleCreateChannel = () => {
+    const channelName = prompt("Please enter the channel name.")
+    if (channelName) {
+      dispatch(createChannel({ name: channelName }))
+    }
+  }
+
   return (
     <SidebarContainer>
       <SidebarHeader workspace="Slack HQ" user="Dejan Bratic" />
       <SidebarMenu />
-      <SidebarChannelPane />
+      <SidebarChannelList
+        header={
+          <SidebarItem
+            LeftIcon={<ExpandMoreIcon />}
+            title="Channels"
+            RightIcon={<AddIcon onClick={handleCreateChannel} />}
+          />
+        }
+        channels={channels}
+      />
     </SidebarContainer>
   )
 }

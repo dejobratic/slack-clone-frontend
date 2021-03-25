@@ -6,16 +6,25 @@ import DraftsIcon from "@material-ui/icons/Drafts"
 import BookmarkBorderIcon from "@material-ui/icons/BookmarkBorder"
 import PeopleAltIcon from "@material-ui/icons/PeopleAlt"
 
-import SidebarMenuOption from "app/sidebar/SidebarMenuOption"
+import SidebarMenuOption from "app/sidebar/SidebarItem"
 
 const SidebarMenu = () => {
   return (
     <>
-      <SidebarMenuOption Icon={InsertCommentIcon} title="Threads" />
-      <SidebarMenuOption Icon={InboxIcon} title="Mentions & reactions" />
-      <SidebarMenuOption Icon={DraftsIcon} title="Saved items" />
-      <SidebarMenuOption Icon={BookmarkBorderIcon} title="Channel browser" />
-      <SidebarMenuOption Icon={PeopleAltIcon} title="People & user groups" />
+      <SidebarMenuOption LeftIcon={<InsertCommentIcon />} title="Threads" />
+      <SidebarMenuOption
+        LeftIcon={<InboxIcon />}
+        title="Mentions & reactions"
+      />
+      <SidebarMenuOption LeftIcon={<DraftsIcon />} title="Saved items" />
+      <SidebarMenuOption
+        LeftIcon={<BookmarkBorderIcon />}
+        title="Channel browser"
+      />
+      <SidebarMenuOption
+        LeftIcon={<PeopleAltIcon />}
+        title="People & user groups"
+      />
       <hr />
     </>
   )
