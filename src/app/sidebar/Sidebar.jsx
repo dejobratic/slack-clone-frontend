@@ -1,6 +1,6 @@
-import React, { useEffect } from "react"
+import React, { useState, useEffect } from "react"
 import { useDispatch, useSelector } from "react-redux"
-import styled from "styled-components"
+import styled, { css } from "styled-components"
 
 import AddIcon from "@material-ui/icons/Add"
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore"
@@ -28,6 +28,8 @@ const Sidebar = () => {
     }
   }
 
+  const [collapsed, setCollapsed] = useState(false)
+
   return (
     <SidebarContainer>
       <SidebarHeader workspace="Slack HQ" user="Dejan Bratic" />
@@ -35,18 +37,33 @@ const Sidebar = () => {
       <SidebarChannelList
         header={
           <SidebarItem
-            LeftIcon={<ExpandMoreIcon />}
+            LeftIcon={
+              <ChannelHeaderIcon
+                collapsed={collapsed}
+                onClick={() => setCollapsed(!collapsed)}
+              />
+            }
             title="Channels"
             RightIcon={<AddIcon onClick={handleCreateChannel} />}
           />
         }
         channels={channels}
+        collapsed={collapsed}
       />
     </SidebarContainer>
   )
 }
 
 export default Sidebar
+
+const ChannelHeaderIcon = styled(ExpandMoreIcon)`
+  transition: transform 0.5s !important;
+  ${({ collapsed }) => (collapsed ? transform : css``)}
+`
+
+const transform = css`
+  transform: rotate(-90deg);
+`
 
 const SidebarContainer = styled.div`
   grid-column: 1;
