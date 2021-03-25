@@ -5,16 +5,18 @@ import {
   LogLevel,
 } from "@microsoft/signalr"
 
-export const createSignalRConnection = async (hubUrl) => {
-  const connection = createHubConnection(hubUrl)
+export const createSignalRConnection = async (hubUrl, token) => {
+  const connection = createHubConnection(hubUrl, token)
   await startHubConnection(connection)
 
   return connection
 }
 
-const createHubConnection = (hubUrl) =>
+const createHubConnection = (hubUrl, token) =>
   new HubConnectionBuilder()
-    .withUrl(hubUrl)
+    .withUrl(hubUrl, {
+      accessTokenFactory: () => token,
+    })
     .withAutomaticReconnect()
     .withHubProtocol(new JsonHubProtocol())
     .configureLogging(LogLevel.Information)

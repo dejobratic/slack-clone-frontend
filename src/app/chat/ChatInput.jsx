@@ -4,7 +4,7 @@ import styled from "styled-components"
 
 import { Button } from "@material-ui/core"
 
-import { sendMessage } from "redux/chat/actions"
+import { sendChannelMessage } from "redux/chat/actions"
 
 const ChatInput = ({ channelId, channelName }) => {
   const dispatch = useDispatch()
@@ -14,7 +14,7 @@ const ChatInput = ({ channelId, channelName }) => {
     e.preventDefault()
 
     if (text) {
-      dispatch(sendMessage({ text, channelId }))
+      dispatch(sendChannelMessage({ text, channelId }))
       setText("")
     }
   }

@@ -11,7 +11,7 @@ const SidebarChannel = ({ id, name, selected }) => {
 
   const handleOpenChannel = () => {
     if (currentChannel?.id !== id) {
-      dispatch(openChannel({ id, name }))
+      dispatch(openChannel(id))
     }
   }
 
@@ -27,8 +27,6 @@ const SidebarChannel = ({ id, name, selected }) => {
 
 export default SidebarChannel
 
-const getHoverEffect = ({ selected }) => (selected ? css`` : hover)
-
 const SidebarChannelContainer = styled.div.attrs(({ selected }) => ({
   textColor: selected ? "--text-color" : "--text-color-darker",
   backgroundColor: selected ? "--active-item-color" : "--slack-color",
@@ -41,7 +39,7 @@ const SidebarChannelContainer = styled.div.attrs(({ selected }) => ({
   padding-left: 2px;
   cursor: pointer;
 
-  ${getHoverEffect}
+  ${({ selected }) => (selected ? css`` : hover)}
 
   > h3 {
     padding: 10px 0;
@@ -52,6 +50,7 @@ const SidebarChannelContainer = styled.div.attrs(({ selected }) => ({
     padding: 15px;
   }
 `
+
 const hover = css`
   :hover {
     opacity: 0.9;

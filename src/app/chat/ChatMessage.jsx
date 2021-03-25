@@ -1,7 +1,9 @@
 import React from "react"
 import styled from "styled-components"
 
-const ChatMessage = ({ text, createdAt, creator }) => {
+const ChatMessage = ({ text, createdAt, creator: user }) => {
+  const creator = user ?? { name: "Dejan Bratic", imageUrl: "" }
+
   return (
     <ChatMessageContainer>
       <img src={creator.imageUrl} alt={creator.name} />

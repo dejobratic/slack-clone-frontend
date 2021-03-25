@@ -1,45 +1,45 @@
 export const chatAction = {
-  SEND_MESSAGE_START: "SEND_MESSAGE_START",
-  SEND_MESSAGE_SUCCESS: "SEND_MESSAGE_SUCCESS",
-  SEND_MESSAGE_FAILURE: "SEND_MESSAGE_FAILURE",
+  SEND_CHANNEL_MESSAGE_START: "SEND_CHANNEL_MESSAGE_START",
+  SEND_CHANNEL_MESSAGE_SUCCESS: "SEND_CHANNEL_MESSAGE_SUCCESS",
+  SEND_CHANNEL_MESSAGE_FAILURE: "SEND_CHANNEL_MESSAGE_FAILURE",
 
-  GET_MESSAGES_START: "GET_MESSAGES_START",
-  GET_MESSAGES_SUCCESS: "GET_MESSAGES_SUCCESS",
-  GET_MESSAGES_FAILURE: "GET_MESSAGES_FAILURE",
+  GET_CHANNEL_MESSAGES_START: "GET_CHANNEL_MESSAGES_START",
+  GET_CHANNEL_MESSAGES_SUCCESS: "GET_CHANNEL_MESSAGES_SUCCESS",
+  GET_CHANNEL_MESSAGES_FAILURE: "GET_CHANNEL_MESSAGES_FAILURE",
 
-  ADD_MESSAGE: "ADD_MESSAGE",
+  ADD_CHANNEL_MESSAGE_TO_CHAT: "ADD_CHANNEL_MESSAGE_TO_CHAT",
 }
 
-export const sendMessage = (message) => ({
-  type: chatAction.SEND_MESSAGE_START,
+export const sendChannelMessage = (message) => ({
+  type: chatAction.SEND_CHANNEL_MESSAGE_START,
   payload: message,
 })
 
-export const sendMessageSuccess = () => ({
-  type: chatAction.SEND_MESSAGE_SUCCESS,
+export const sendChannelMessageSuccess = () => ({
+  type: chatAction.SEND_CHANNEL_MESSAGE_SUCCESS,
 })
 
-export const sendMessageFailure = (errorMessage) => ({
-  type: chatAction.SEND_MESSAGE_FAILURE,
+export const sendChannelMessageFailure = (errorMessage) => ({
+  type: chatAction.SEND_CHANNEL_MESSAGE_FAILURE,
   payload: errorMessage,
 })
 
-export const getMessages = (specification) => ({
-  type: chatAction.GET_MESSAGES_START,
+export const getChannelMessages = (specification) => ({
+  type: chatAction.GET_CHANNEL_MESSAGES_START,
   payload: specification,
 })
 
-export const getMessagesSuccess = (messages) => ({
-  type: chatAction.GET_MESSAGES_SUCCESS,
+export const getChannelMessagesSuccess = (messages) => ({
+  type: chatAction.GET_CHANNEL_MESSAGES_SUCCESS,
   payload: messages,
 })
 
-export const getMessagesFailure = (errorMessage) => ({
-  type: chatAction.GET_MESSAGES_FAILURE,
+export const getChannelMessagesFailure = (errorMessage) => ({
+  type: chatAction.GET_CHANNEL_MESSAGES_FAILURE,
   payload: errorMessage,
 })
 
-export const addMessage = (message) => ({
-  type: chatAction.ADD_MESSAGE,
+export const addChannelMessageToChat = (message) => ({
+  type: chatAction.ADD_CHANNEL_MESSAGE_TO_CHAT,
   payload: message,
 })

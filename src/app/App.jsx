@@ -7,19 +7,21 @@ import Sidebar from "app/sidebar/Sidebar"
 
 const App = () => {
   return (
-    <div className="app">
+    <AppContainer className="app">
       <Header />
-      <AppBody>
+      <Body>
         <Sidebar />
         <Chat />
-      </AppBody>
-    </div>
+      </Body>
+    </AppContainer>
   )
 }
 
 export default App
 
-export const AppBody = styled.div`
+const AppContainer = styled.div``
+
+const Body = styled.div`
   display: flex;
   height: 100vh;
   width: 100%;

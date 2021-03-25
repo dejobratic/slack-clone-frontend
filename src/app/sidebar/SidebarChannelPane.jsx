@@ -7,7 +7,7 @@ import ExpandMoreIcon from "@material-ui/icons/ExpandMore"
 import SidebarOption from "app/sidebar/SidebarMenuOption"
 import SidebarChannel from "app/sidebar/SidebarChannel"
 
-import { getAllChannels, createChannel } from "redux/channel/actions"
+import { getSubscribedChannels, createChannel } from "redux/channel/actions"
 import {
   selectAllChannels,
   selectCurrentChannel,
@@ -19,13 +19,13 @@ const SidebarChannelPane = () => {
   const currentChannel = useSelector(selectCurrentChannel)
 
   useEffect(() => {
-    dispatch(getAllChannels())
+    dispatch(getSubscribedChannels())
   }, [dispatch])
 
   const handleCreateChannel = () => {
     const channelName = prompt("Please enter the channel name.")
     if (channelName) {
-      dispatch(createChannel({ channelName }))
+      dispatch(createChannel({ name: channelName }))
     }
   }
 

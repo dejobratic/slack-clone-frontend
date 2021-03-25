@@ -2,21 +2,24 @@ import { createSignalRConnection } from "middleware/signalR"
 
 import {
   channelAction,
-  openChannel,
-  addChannel,
   createChannelSuccess,
   createChannelFailure,
+  getSubscribedChannelsSuccess,
+  getSubscribedChannelsFailure,
 } from "redux/channel/actions"
 
 import {
   chatAction,
-  addMessage,
-  sendMessageSuccess,
-  sendMessageFailure,
+  addChannelMessageToChat,
+  sendChannelMessageSuccess,
+  sendChannelMessageFailure,
+  getChannelMessagesSuccess,
+  getChannelMessagesFailure,
 } from "redux/chat/actions"
 
 let hubConnection
 let semaphore = false
+const token = "token"
 
 const getHubConnection = async (store) => {
   if (!hubConnection && !semaphore) {
@@ -29,9 +32,9 @@ const getHubConnection = async (store) => {
 
 export const establishSignalRConnection = async ({ dispatch, getState }) => {
   const hubUrl = process.env.REACT_APP_CHAT_HUB_URL
-  hubConnection = await createSignalRConnection(hubUrl)
+  hubConnection = await createSignalRConnection(hubUrl, token)
 
-  hubConnection.on("ReceiveMessage", (message) => {
+  hubConnection.on("ReceiveChannelMessage", (message) => {
     const {
       channel: {
         current: { id: channelId },
@@ -39,13 +42,20 @@ export const establishSignalRConnection = async ({ dispatch, getState }) => {
     } = getState()
 
     if (channelId === message.channelId) {
-      dispatch(addMessage(message))
+      dispatch(addChannelMessageToChat(message))
     }
   })
 
+  hubConnection.on("GetChannelMessages", (messages) => {
+    dispatch(getChannelMessagesSuccess(messages))
+  })
+
+  hubConnection.on("GetSubscribedChannels", (channels) => {
+    dispatch(getSubscribedChannelsSuccess(channels))
+  })
+
   hubConnection.on("CreateChannel", (channel) => {
-    dispatch(addChannel(channel))
-    dispatch(openChannel(channel))
+    dispatch(createChannelSuccess(channel))
   })
 }
 
@@ -53,46 +63,61 @@ const signalRMiddleware = (store) => (next) => async (action) => {
   next(action)
 
   switch (action?.type) {
-    case channelAction.GET_ALL_CHANNELS_SUCCESS:
-      return await onGetAllChannels(action, store)
+    case channelAction.GET_SUBSCRIBED_CHANNELS_START:
+      return await onGetSubscribedChannels(action, store)
 
-    case channelAction.CREATE_NEW_CHANNEL_START:
+    case channelAction.GET_SUBSCRIBED_CHANNELS_SUCCESS:
+      return await onJoinSubscribedChannels(action, store)
+
+    case channelAction.CREATE_CHANNEL_START:
       return await onCreateChannel(action, store)
 
-    case channelAction.ADD_CHANNEL_START:
-      return await onAddChannel(action, store)
+    case chatAction.SEND_CHANNEL_MESSAGE_START:
+      return await onSendChannelMessage(action, store)
 
-    case chatAction.SEND_MESSAGE_START:
-      return await onSendMessage(action, store)
+    case chatAction.GET_CHANNEL_MESSAGES_START:
+      return await onGetChannelMessages(action, store)
 
     default:
       break
   }
 }
 
-const onGetAllChannels = async (action, store) => {
+const onGetSubscribedChannels = async (action, store) => {
+  try {
+    const hubConnection = await getHubConnection(store)
+    await hubConnection.invoke("GetSubscribedChannels", action.payload)
+  } catch (error) {
+    store.dispatch(getSubscribedChannelsFailure(error.message))
+  }
+}
+
+const onJoinSubscribedChannels = async (action, store) => {
   try {
     const { payload: channels } = action
 
     const hubConnection = await getHubConnection(store)
-    for (let i = 0; i < channels.length; i++) {
-      await hubConnection.invoke("JoinMessageGroup", channels[i].id)
-    }
+    for (const channel of channels)
+      await hubConnection.invoke("JoinChannel", channel.id)
   } catch (error) {
     console.log(error)
   }
 }
 
-const onSendMessage = async (action, store) => {
+const onSendChannelMessage = async (action, store) => {
   try {
     const { channelId } = action.payload
 
     const hubConnection = await getHubConnection(store)
-    await hubConnection.invoke("SendMessageToGroup", channelId, action.payload)
+    await hubConnection.invoke(
+      "SendMessageToChannel",
+      channelId,
+      action.payload
+    )
 
-    store.dispatch(sendMessageSuccess())
+    store.dispatch(sendChannelMessageSuccess())
   } catch (error) {
-    store.dispatch(sendMessageFailure(error.message))
+    store.dispatch(sendChannelMessageFailure(error.message))
   }
 }
 
@@ -100,17 +125,18 @@ const onCreateChannel = async (action, store) => {
   try {
     const hubConnection = await getHubConnection(store)
     await hubConnection.invoke("CreateChannel", action.payload)
-
-    store.dispatch(createChannelSuccess())
   } catch (error) {
     store.dispatch(createChannelFailure(error.message))
   }
 }
 
-const onAddChannel = async (action, store) => {
+const onGetChannelMessages = async (action, store) => {
   try {
     const hubConnection = await getHubConnection(store)
-  } catch (error) {}
+    await hubConnection.invoke("GetChannelMessages", action.payload)
+  } catch (error) {
+    store.dispatch(getChannelMessagesFailure(error.message))
+  }
 }
 
 export default signalRMiddleware

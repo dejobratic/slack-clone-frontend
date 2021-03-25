@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux"
 
 import Chat from "app/chat/Chat"
 
-import { getMessages } from "redux/chat/actions"
+import { getChannelMessages } from "redux/chat/actions"
 import { selectChat } from "redux/chat/selectors"
 import { selectCurrentChannel } from "redux/channel/selectors"
 
@@ -16,7 +16,11 @@ const ChatContainer = () => {
   useEffect(() => {
     if (channel)
       dispatch(
-        getMessages({ channelId: channel.id, pageNumber: 1, pageSize: 10 })
+        getChannelMessages({
+          channelId: channel.id,
+          pageNumber: 1,
+          pageSize: 10,
+        })
       )
   }, [channel, dispatch])
 
