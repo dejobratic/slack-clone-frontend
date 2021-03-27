@@ -16,7 +16,7 @@ const Chat = ({ channel, messages }) => {
 
   return (
     <>
-      <ChatHeader channelName={channel.name} />
+      <ChatHeader channel={channel} />
       <ChatMessageList>
         {messages.map((message) => (
           <ChatMessage key={message.id} {...message} />

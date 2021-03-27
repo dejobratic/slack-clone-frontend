@@ -13,6 +13,12 @@ body {
   --active-item-color: #1164a3;
   --active-presence-color: #2bac76;
 
+  --green-color: #459e85;
+  --green-color-lighter: #49c39e;
+  --green-color-darker: #007a5a;
+
+  --red-color: #d40e0d;
+
   overflow: hidden;
 
   margin: 0;

@@ -6,6 +6,8 @@ import {
   createChannelFailure,
   getSubscribedChannelsSuccess,
   getSubscribedChannelsFailure,
+  updateChannelSuccess,
+  updateChannelFailure,
 } from "redux/channel/actions"
 
 import {
@@ -57,6 +59,10 @@ export const establishSignalRConnection = async ({ dispatch, getState }) => {
   hubConnection.on("CreateChannel", (channel) => {
     dispatch(createChannelSuccess(channel))
   })
+
+  hubConnection.on("UpdateChannel", (channel) => {
+    dispatch(updateChannelSuccess(channel))
+  })
 }
 
 const signalRMiddleware = (store) => (next) => async (action) => {
@@ -71,6 +77,9 @@ const signalRMiddleware = (store) => (next) => async (action) => {
 
     case channelAction.CREATE_CHANNEL_START:
       return await onCreateChannel(action, store)
+
+    case channelAction.UPDATE_CHANNEL_START:
+      return await onUpdateChannel(action, store)
 
     case chatAction.SEND_CHANNEL_MESSAGE_START:
       return await onSendChannelMessage(action, store)
@@ -127,6 +136,15 @@ const onCreateChannel = async (action, store) => {
     await hubConnection.invoke("CreateChannel", action.payload)
   } catch (error) {
     store.dispatch(createChannelFailure(error.message))
+  }
+}
+
+const onUpdateChannel = async (action, store) => {
+  try {
+    const hubConnection = await getHubConnection(store)
+    await hubConnection.invoke("UpdateChannel", action.payload)
+  } catch (error) {
+    store.dispatch(updateChannelFailure(error.message))
   }
 }
 
