@@ -9,6 +9,7 @@ import SidebarHeader from "app/sidebar/SidebarHeader"
 import SidebarMenu from "app/sidebar/SidebarMenu"
 import SidebarChannelList from "app/sidebar/SidebarChannelList"
 import SidebarItem from "app/sidebar/SidebarItem"
+import CreateChannelModal from "app/sidebar/CreateChannelModal"
 
 import { getSubscribedChannels, createChannel } from "redux/channel/actions"
 import { selectAllChannels } from "redux/channel/selectors"
@@ -17,40 +18,51 @@ const Sidebar = () => {
   const dispatch = useDispatch()
   const channels = useSelector(selectAllChannels)
 
+  const [showModal, setShowModal] = useState(false)
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(false)
+
+  const toggleShowModal = () => setShowModal(!showModal)
+  const toggleSidebarCollapsed = () => setSidebarCollapsed(!sidebarCollapsed)
+
   useEffect(() => {
     dispatch(getSubscribedChannels())
   }, [dispatch])
 
-  const handleCreateChannel = () => {
-    const channelName = prompt("Please enter the channel name.")
-    if (channelName) {
-      dispatch(createChannel({ name: channelName }))
+  const handleCreateChannel = (channel) => {
+    if (channel?.name && channel?.description) {
+      dispatch(createChannel(channel))
     }
   }
 
-  const [collapsed, setCollapsed] = useState(false)
-
   return (
-    <SidebarContainer>
-      <SidebarHeader workspace="Slack HQ" user="Dejan Bratic" />
-      <SidebarMenu />
-      <SidebarChannelList
-        header={
-          <SidebarItem
-            LeftIcon={
-              <ChannelHeaderIcon
-                collapsed={collapsed}
-                onClick={() => setCollapsed(!collapsed)}
-              />
-            }
-            title="Channels"
-            RightIcon={<AddIcon onClick={handleCreateChannel} />}
-          />
-        }
-        channels={channels}
-        collapsed={collapsed}
+    <>
+      <SidebarContainer>
+        <SidebarHeader workspace="Slack HQ" user="Dejan Bratic" />
+        <SidebarMenu />
+        <SidebarChannelList
+          header={
+            <SidebarItem
+              LeftIcon={
+                <ChannelHeaderIcon
+                  collapsed={sidebarCollapsed}
+                  onClick={toggleSidebarCollapsed}
+                />
+              }
+              title="Channels"
+              RightIcon={<AddIcon onClick={toggleShowModal} />}
+            />
+          }
+          channels={channels}
+          collapsed={sidebarCollapsed}
+        />
+      </SidebarContainer>
+
+      <CreateChannelModal
+        shown={showModal}
+        onClose={toggleShowModal}
+        onSubmit={handleCreateChannel}
       />
-    </SidebarContainer>
+    </>
   )
 }
 

@@ -5,29 +5,21 @@ import styled from "styled-components"
 import StarBorderOutlinedIcon from "@material-ui/icons/StarBorderOutlined"
 import InfoOutlinedIcon from "@material-ui/icons/InfoOutlined"
 
-import Modal from "app/components/modal/Modal"
-import TextInput from "app/components/text-input/TextInput"
-import Button from "app/components/button/Button"
 import { updateChannel } from "redux/channel/actions"
+import UpdateDescriptionModal from "./UpdateChannelDescriptionModal"
 
 const ChatHeader = ({ channel }) => {
   const dispatch = useDispatch()
   const { name, description } = channel
 
-  console.log(channel)
+  const [showModal, setShowModal] = useState(false)
 
-  const [edit, setEdit] = useState(false)
-  const [newDescription, setNewDescription] = useState(description)
+  const toggleShowModal = () => setShowModal(!showModal)
 
-  const toggleEdit = () => setEdit(!edit)
-
-  const handleUpdateDescription = (e) => {
-    e.preventDefault()
-
-    if (newDescription) {
-      dispatch(updateChannel({ ...channel, description: newDescription }))
-      toggleEdit()
-      setNewDescription("")
+  const handleUpdateDescription = (description) => {
+    if (description) {
+      dispatch(updateChannel({ ...channel, description }))
+      toggleShowModal()
     }
   }
 
@@ -42,7 +34,7 @@ const ChatHeader = ({ channel }) => {
             <StarBorderOutlinedIcon />
           </ChannelNameContainer>
           <ChannelDescriptionContainer>
-            <p onClick={toggleEdit}>
+            <p onClick={toggleShowModal}>
               <span>{description ?? "Add a description"}</span>
             </p>
           </ChannelDescriptionContainer>
@@ -51,28 +43,11 @@ const ChatHeader = ({ channel }) => {
           <InfoOutlinedIcon />
         </ChatHeaderRight>
       </ChatHeaderContainer>
-      <Modal
-        shown={edit}
-        title="Edit channel description"
-        onClose={toggleEdit}
-        content={
-          <TextInput
-            rows={5}
-            type="textarea"
-            value={newDescription}
-            onChange={(e) => setNewDescription(e.target.value)}
-          />
-        }
-        actions={
-          <>
-            <Button onClick={toggleEdit} variant="basic">
-              Cancel
-            </Button>
-            <Button onClick={handleUpdateDescription} variant="primary">
-              Set Topic
-            </Button>
-          </>
-        }
+
+      <UpdateDescriptionModal
+        shown={showModal}
+        onClose={toggleShowModal}
+        onSubmit={handleUpdateDescription}
       />
     </>
   )
@@ -120,7 +95,7 @@ const ChannelDescriptionContainer = styled.div`
     cursor: pointer;
   }
 
-  > p > span :hover {
+  > p > span:hover {
     text-decoration: underline;
   }
 `
