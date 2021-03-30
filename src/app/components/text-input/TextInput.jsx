@@ -12,7 +12,11 @@ const TextInput = ({ as = "input", label, ...restProps }) => {
 
 export default TextInput
 
-const TextInputContainer = styled.div``
+const TextInputContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+`
 
 const Label = styled.div`
   font-size: small;
@@ -22,7 +26,7 @@ const Label = styled.div`
 
 const Input = styled.div`
   resize: none;
-  width: 95%;
+  width: 97%;
   padding: 5px;
   border-radius: 5px;
   border: 1px solid black;
