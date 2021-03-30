@@ -1,7 +1,7 @@
 import React from "react"
 import { useSelector } from "react-redux"
 
-import SidebarChannel from "app/sidebar/SidebarChannel"
+import SidebarChannel from "app/pages/home/sidebar/SidebarChannel"
 
 import { selectCurrentChannel } from "redux/channel/selectors"
 

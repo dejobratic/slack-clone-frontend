@@ -8,7 +8,7 @@ import InfoOutlinedIcon from "@material-ui/icons/InfoOutlined"
 import { updateChannel } from "redux/channel/actions"
 import UpdateDescriptionModal from "./UpdateChannelDescriptionModal"
 
-const ChatHeader = ({ channel }) => {
+const ChatDetails = ({ channel }) => {
   const dispatch = useDispatch()
   const { name, description } = channel
 
@@ -24,7 +24,7 @@ const ChatHeader = ({ channel }) => {
   }
 
   return (
-    <>
+    <ChatDetailsContainer>
       <ChatHeaderContainer>
         <ChatHeaderLeft>
           <ChannelNameContainer>
@@ -49,11 +49,13 @@ const ChatHeader = ({ channel }) => {
         onClose={toggleShowModal}
         onSubmit={handleUpdateDescription}
       />
-    </>
+    </ChatDetailsContainer>
   )
 }
 
-export default ChatHeader
+export default ChatDetails
+
+const ChatDetailsContainer = styled.div``
 
 const ChatHeaderContainer = styled.div`
   grid-row: 1;

@@ -5,11 +5,11 @@ import styled, { css } from "styled-components"
 import AddIcon from "@material-ui/icons/Add"
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore"
 
-import SidebarHeader from "app/sidebar/SidebarHeader"
-import SidebarMenu from "app/sidebar/SidebarMenu"
-import SidebarChannelList from "app/sidebar/SidebarChannelList"
-import SidebarItem from "app/sidebar/SidebarItem"
-import CreateChannelModal from "app/sidebar/CreateChannelModal"
+import SidebarHeader from "app/pages/home/sidebar/SidebarHeader"
+import SidebarMenu from "app/pages/home/sidebar/SidebarMenu"
+import SidebarChannelList from "app/pages/home/sidebar/SidebarChannelList"
+import SidebarItem from "app/pages/home/sidebar/SidebarItem"
+import CreateChannelModal from "app/pages/home/sidebar/CreateChannelModal"
 
 import { getSubscribedChannels, createChannel } from "redux/channel/actions"
 import { selectAllChannels } from "redux/channel/selectors"
@@ -29,7 +29,7 @@ const Sidebar = () => {
   }, [dispatch])
 
   const handleCreateChannel = (channel) => {
-    if (channel?.name && channel?.description) {
+    if (channel?.name) {
       dispatch(createChannel(channel))
     }
   }

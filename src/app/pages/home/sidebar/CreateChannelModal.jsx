@@ -1,5 +1,4 @@
 import React, { useState } from "react"
-import styled from "styled-components"
 
 import Modal from "app/components/modal/Modal"
 import TextInput from "app/components/text-input/TextInput"
@@ -33,14 +32,12 @@ const CreateChannelModal = ({ shown, onClose, onSubmit }) => {
         <>
           <TextInput
             rows={1}
-            type="input"
             label="Name"
             value={name}
             onChange={(e) => setName(e.target.value)}
           />
           <TextInput
             rows={1}
-            type="input"
             label="Description"
             value={description}
             onChange={(e) => setDescription(e.target.value)}

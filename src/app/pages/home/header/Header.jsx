@@ -1,9 +1,30 @@
+import React from "react"
 import styled from "styled-components"
 
 import AccountCircle from "@material-ui/icons/AccountCircle"
 import AccessTime from "@material-ui/icons/AccessTime"
 import Search from "@material-ui/icons/Search"
 import HelpOutlineIcon from "@material-ui/icons/HelpOutline"
+
+const Header = () => {
+  return (
+    <HeaderContainer>
+      <HeaderLeftPane>
+        <AvatarIcon />
+        <TimeIcon />
+      </HeaderLeftPane>
+      <HeaderCenterPane>
+        <SearchIcon />
+        <input type="text" />
+      </HeaderCenterPane>
+      <HeaderRightPane>
+        <HelpIcon />
+      </HeaderRightPane>
+    </HeaderContainer>
+  )
+}
+
+export default Header
 
 export const HeaderContainer = styled.header`
   display: flex;

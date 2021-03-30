@@ -1,7 +1,7 @@
 import React, { useEffect } from "react"
 import { useDispatch, useSelector } from "react-redux"
 
-import Chat from "app/chat/Chat"
+import Chat from "app/pages/home/chat/Chat"
 
 import { getChannelMessages } from "redux/chat/actions"
 import { selectChat } from "redux/chat/selectors"

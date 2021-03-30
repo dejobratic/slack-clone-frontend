@@ -6,7 +6,7 @@ import DraftsIcon from "@material-ui/icons/Drafts"
 import BookmarkBorderIcon from "@material-ui/icons/BookmarkBorder"
 import PeopleAltIcon from "@material-ui/icons/PeopleAlt"
 
-import SidebarMenuOption from "app/sidebar/SidebarItem"
+import SidebarMenuOption from "app/pages/home/sidebar/SidebarItem"
 
 const SidebarMenu = () => {
   return (

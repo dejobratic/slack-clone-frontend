@@ -24,7 +24,7 @@ const UpdateChannelDescriptionModal = ({ shown, onClose, onSubmit }) => {
       content={
         <TextInput
           rows={5}
-          type="textarea"
+          as="textarea"
           label="Description"
           value={description}
           onChange={(e) => setDescription(e.target.value)}

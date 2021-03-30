@@ -1,7 +1,7 @@
 import React from "react"
 import styled from "styled-components"
 
-import ChatMessage from "app/chat/ChatMessage"
+import ChatMessage from "app/pages/home/chat/ChatMessage"
 
 const ChatMessageList = ({ chatRef, messages = [] }) => {
   return (

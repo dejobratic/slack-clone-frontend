@@ -1,9 +1,9 @@
 import React, { useEffect, useRef } from "react"
 import styled from "styled-components"
 
-import ChatHeader from "app/chat/ChatHeader"
-import ChatMessage from "app/chat/ChatMessage"
-import ChatInput from "app/chat/ChatInput"
+import ChatDetails from "app/pages/home/chat/ChatDetails"
+import ChatMessage from "app/pages/home/chat/ChatMessage"
+import ChatInput from "app/pages/home/chat/ChatInput"
 
 const Chat = ({ channel, messages }) => {
   const chatRef = useRef(null)
@@ -16,7 +16,7 @@ const Chat = ({ channel, messages }) => {
 
   return (
     <>
-      <ChatHeader channel={channel} />
+      <ChatDetails channel={channel} />
       <ChatMessageList>
         {messages.map((message) => (
           <ChatMessage key={message.id} {...message} />

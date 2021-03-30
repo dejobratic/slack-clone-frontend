@@ -1,11 +1,11 @@
 import React from "react"
 import styled from "styled-components"
 
-const TextInput = ({ type = "input", label, ...restProps }) => {
+const TextInput = ({ as = "input", label, ...restProps }) => {
   return (
     <TextInputContainer>
       <Label>{label}</Label>
-      <Input as={type} {...restProps} />
+      <Input as={as} {...restProps} />
     </TextInputContainer>
   )
 }
@@ -20,7 +20,7 @@ const Label = styled.div`
   margin-bottom: 5px;
 `
 
-const Input = styled.textarea`
+const Input = styled.div`
   resize: none;
   width: 95%;
   padding: 5px;
