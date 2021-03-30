@@ -1,13 +1,13 @@
 import React from "react"
 import { Route } from "react-router-dom"
 
-import HomePage from "app/pages/home/HomePage"
-import LoginPage from "app/pages/user-registration/UserRegistrationPage"
+import { default as HomePage } from "app/pages/home/HomePageContainer"
+import { default as UserRegistrationPage } from "app/pages/user-registration/UserRegistrationPageContainer"
 
 const App = () => {
   return (
     <>
-      <Route path="/login" component={LoginPage} />
+      <Route path="/login" component={UserRegistrationPage} />
       <Route exact path="/" component={HomePage} />
     </>
   )

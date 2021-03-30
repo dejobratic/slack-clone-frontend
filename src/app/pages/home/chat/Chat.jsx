@@ -5,7 +5,7 @@ import ChatDetails from "app/pages/home/chat/ChatDetails"
 import ChatMessage from "app/pages/home/chat/ChatMessage"
 import ChatInput from "app/pages/home/chat/ChatInput"
 
-const Chat = ({ channel, messages }) => {
+const Chat = ({ userId, channel, messages }) => {
   const chatRef = useRef(null)
 
   useEffect(() => {
@@ -23,7 +23,11 @@ const Chat = ({ channel, messages }) => {
         ))}
         <ChatBottom ref={chatRef} />
       </ChatMessageList>
-      <ChatInput channelId={channel.id} channelName={channel.name} />
+      <ChatInput
+        userId={userId}
+        channelId={channel.id}
+        channelName={channel.name}
+      />
     </>
   )
 }

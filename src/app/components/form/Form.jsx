@@ -29,7 +29,7 @@ const FormHeader = styled.div`
 
 const FormContent = styled.div`
   width: 100%;
-  margin: 10px 0;
+  gap: 5px;
 
   display: flex;
   flex-direction: column;
@@ -37,7 +37,7 @@ const FormContent = styled.div`
 `
 
 const FormActions = styled.div`
-  margin: 10px 0;
+  margin: 20px 0;
 
   display: flex;
   flex-direction: row;

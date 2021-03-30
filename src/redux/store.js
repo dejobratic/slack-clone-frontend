@@ -1,8 +1,9 @@
 import { createStore, applyMiddleware } from "redux"
+import { persistStore } from "redux-persist"
 import createSagaMiddleware from "redux-saga"
 import { composeWithDevTools } from "redux-devtools-extension"
 
-import signalRMiddleware from "middleware/signalRMiddleware"
+import signalRMiddleware from "middleware/signalr/signalRMiddleware"
 
 import rootReducer from "redux/root-reducer"
 import rootSaga from "redux/root-saga"
@@ -17,4 +18,6 @@ const store = createStore(
 
 sagaMiddleware.run(rootSaga)
 
-export default store
+const persister = persistStore(store)
+
+export { store, persister }

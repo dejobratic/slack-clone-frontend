@@ -44,7 +44,7 @@ const Sidebar = () => {
             <SidebarItem
               LeftIcon={
                 <ChannelHeaderIcon
-                  collapsed={sidebarCollapsed}
+                  collapsed={`${sidebarCollapsed}`} // error will be thrown when `` are removed
                   onClick={toggleSidebarCollapsed}
                 />
               }

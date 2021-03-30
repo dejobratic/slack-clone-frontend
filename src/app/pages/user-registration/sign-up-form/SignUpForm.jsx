@@ -1,10 +1,15 @@
 import React, { useState } from "react"
+import { useDispatch } from "react-redux"
 
 import Form from "app/components/form/Form"
 import TextInput from "app/components/text-input/TextInput"
 import Button from "app/components/button/Button"
 
+import { signUp } from "redux/user-login/actions"
+
 const SignUpForm = () => {
+  const dispatch = useDispatch()
+
   const [firstName, setFirstName] = useState("")
   const [lastName, setLastName] = useState("")
   const [email, setEmail] = useState("")
@@ -15,10 +20,10 @@ const SignUpForm = () => {
     event.preventDefault()
 
     if (password !== confirmedPassword) {
-      alert("Passwords do not match.")
+      return alert("Passwords do not match.")
     }
 
-    // dispatch(signUpUser({ firstName, lastName, email, password }))
+    dispatch(signUp({ firstName, lastName, email, password }))
   }
 
   return (

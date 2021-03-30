@@ -6,12 +6,14 @@ import Chat from "app/pages/home/chat/Chat"
 import { getChannelMessages } from "redux/chat/actions"
 import { selectChat } from "redux/chat/selectors"
 import { selectCurrentChannel } from "redux/channel/selectors"
+import { selectCurrentUser } from "redux/user-login/selectors"
 
 const ChatContainer = () => {
   const dispatch = useDispatch()
 
-  const { messages, loading } = useSelector(selectChat)
+  const { id: userId } = useSelector(selectCurrentUser)
   const channel = useSelector(selectCurrentChannel)
+  const { messages, loading } = useSelector(selectChat)
 
   useEffect(() => {
     if (channel)
@@ -26,7 +28,7 @@ const ChatContainer = () => {
 
   if (!channel || loading) return <></>
 
-  return <Chat channel={channel} messages={messages} />
+  return <Chat userId={userId} channel={channel} messages={messages} />
 }
 
 export default ChatContainer

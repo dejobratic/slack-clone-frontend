@@ -1,4 +1,4 @@
-import { createSignalRConnection } from "middleware/signalR"
+import { createSignalRConnection } from "middleware/signalr/signalR"
 
 import {
   channelAction,
