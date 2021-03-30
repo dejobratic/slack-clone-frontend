@@ -40,6 +40,7 @@ export const HeaderContainer = styled.header`
 export const HeaderLeftPane = styled.div`
   flex: 0.3;
   display: flex;
+  flex-direction: row;
   align-items: center;
   margin-left: 20px;
 

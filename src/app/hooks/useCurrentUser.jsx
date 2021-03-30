@@ -1,13 +1,14 @@
-import React, {useEffect} from 'react';
+import { useEffect } from "react"
+import { useSelector } from "react-redux"
 
 import { selectCurrentUser } from "redux/user-login/selectors"
 
-const useCurrentUser = () => {
-    return (
-        <div>
-            
-        </div>
-    );
-};
+const useCurrentUser = (callback) => {
+  const currentUser = useSelector(selectCurrentUser)
 
-export default useCurrentUser;
+  useEffect(() => {
+    callback(currentUser)
+  }, [callback, currentUser])
+}
+
+export default useCurrentUser

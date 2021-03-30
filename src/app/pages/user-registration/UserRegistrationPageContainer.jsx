@@ -1,22 +1,18 @@
-import React, { useEffect } from "react"
-import { useDispatch, useSelector } from "react-redux"
+import React from "react"
 import { useHistory } from "react-router-dom"
 
 import UserRegistrationPage from "app/pages/user-registration/UserRegistrationPage"
 
-import { selectCurrentUser } from "redux/user-login/selectors"
+import useCurrentUser from "app/hooks/useCurrentUser"
 
 const UserRegistrationPageContainer = () => {
-  const dispatch = useDispatch()
   const history = useHistory()
 
-  const currentUser = useSelector(selectCurrentUser)
-
-  useEffect(() => {
+  useCurrentUser((currentUser) => {
     if (currentUser) {
       history.push("/")
     }
-  }, [dispatch, history, currentUser])
+  })
 
   return <UserRegistrationPage />
 }
