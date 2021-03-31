@@ -78,6 +78,9 @@ const signalRMiddleware = (store) => (next) => async (action) => {
     case channelAction.CREATE_CHANNEL_START:
       return await onCreateChannel(action, store)
 
+    case channelAction.CREATE_CHANNEL_SUCCESS:
+      return await onJoinCreatedChannel(action, store)
+
     case channelAction.UPDATE_CHANNEL_START:
       return await onUpdateChannel(action, store)
 
@@ -136,6 +139,16 @@ const onCreateChannel = async (action, store) => {
     await hubConnection.invoke("CreateChannel", action.payload)
   } catch (error) {
     store.dispatch(createChannelFailure(error.message))
+  }
+}
+
+const onJoinCreatedChannel = async (action, store) => {
+  try {
+    const { payload: channel } = action
+    const hubConnection = await getHubConnection(store)
+    await hubConnection.invoke("JoinChannel", channel.id)
+  } catch (error) {
+    console.log(error)
   }
 }
 

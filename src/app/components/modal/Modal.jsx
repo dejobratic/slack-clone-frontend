@@ -51,6 +51,7 @@ const ModalContentContainer = styled.div`
   flex-direction: column;
   justify-content: space-between;
 
+  gap: 5px;
   padding-left: 20px;
   padding-right: 20px;
   padding-bottom: 20px;

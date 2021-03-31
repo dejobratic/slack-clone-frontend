@@ -13,10 +13,12 @@ import CreateChannelModal from "app/pages/home/sidebar/CreateChannelModal"
 
 import { getSubscribedChannels, createChannel } from "redux/channel/actions"
 import { selectAllChannels } from "redux/channel/selectors"
+import { selectCurrentUser } from "redux/user-login/selectors"
 
 const Sidebar = () => {
   const dispatch = useDispatch()
   const channels = useSelector(selectAllChannels)
+  const currentUser = useSelector(selectCurrentUser)
 
   const [showModal, setShowModal] = useState(false)
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false)
@@ -30,21 +32,24 @@ const Sidebar = () => {
 
   const handleCreateChannel = (channel) => {
     if (channel?.name) {
-      dispatch(createChannel(channel))
+      dispatch(createChannel({ ...channel, creatorId: currentUser.Id }))
     }
   }
 
   return (
     <>
       <SidebarContainer>
-        <SidebarHeader workspace="Slack HQ" user="Dejan Bratic" />
+        <SidebarHeader
+          workspace="Slack HQ"
+          user={`${currentUser.firstName} ${currentUser.lastName}`}
+        />
         <SidebarMenu />
         <SidebarChannelList
           header={
             <SidebarItem
               LeftIcon={
                 <ChannelHeaderIcon
-                  collapsed={`${sidebarCollapsed}`} // error will be thrown when `` are removed
+                  collapsed={sidebarCollapsed}
                   onClick={toggleSidebarCollapsed}
                 />
               }
