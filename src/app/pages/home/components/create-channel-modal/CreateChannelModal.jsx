@@ -5,8 +5,8 @@ import TextInput from "app/components/text-input/TextInput"
 import Button from "app/components/button/Button"
 
 const CreateChannelModal = ({ shown, onClose, onSubmit }) => {
-  const [name, setName] = useState()
-  const [description, setDescription] = useState()
+  const [name, setName] = useState(null)
+  const [description, setDescription] = useState(null)
 
   const handleOnSubmit = () => {
     onSubmit({ name, description })
@@ -19,8 +19,8 @@ const CreateChannelModal = ({ shown, onClose, onSubmit }) => {
   }
 
   const resetInput = () => {
-    setName("")
-    setDescription("")
+    setName(null)
+    setDescription(null)
   }
 
   return (
@@ -35,6 +35,7 @@ const CreateChannelModal = ({ shown, onClose, onSubmit }) => {
             label="Name"
             value={name}
             onChange={(e) => setName(e.target.value)}
+            autoFocus
           />
           <TextInput
             rows={1}

@@ -13,7 +13,7 @@ const UpdateChannelDescriptionModal = ({ shown, onClose, onSubmit }) => {
 
   const handleOnSubmit = () => {
     onSubmit(description)
-    setDescription("")
+    setDescription(null)
   }
 
   return (
@@ -28,6 +28,7 @@ const UpdateChannelDescriptionModal = ({ shown, onClose, onSubmit }) => {
           label="Description"
           value={description}
           onChange={(e) => setDescription(e.target.value)}
+          autoFocus
         />
       }
       actions={

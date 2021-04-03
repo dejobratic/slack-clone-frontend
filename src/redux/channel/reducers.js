@@ -1,7 +1,13 @@
 import { channelAction } from "redux/channel/actions"
 
+import {
+  updateChannelIfMatches,
+  updateChannelInList,
+} from "redux/channel/utils"
+
 const INITIAL_STATE = {
   all: [],
+  subscribed: [],
   current: null,
   errorMessage: null,
   loading: false,
@@ -9,17 +15,26 @@ const INITIAL_STATE = {
 
 const channelReducer = (state = INITIAL_STATE, action) => {
   switch (action.type) {
-    case channelAction.GET_SUBSCRIBED_CHANNELS_START:
+    case channelAction.LOAD_ALL_CHANNELS_START:
+    case channelAction.LOAD_SUBSCRIBED_CHANNELS_START:
     case channelAction.CREATE_CHANNEL_START:
     case channelAction.UPDATE_CHANNEL_START:
       return { ...state, errorMessage: null, loading: true }
 
-    case channelAction.GET_SUBSCRIBED_CHANNELS_SUCCESS:
+    case channelAction.LOAD_ALL_CHANNELS_SUCCESS:
       return {
         ...state,
         errorMessage: null,
         loading: false,
         all: action.payload,
+      }
+
+    case channelAction.LOAD_SUBSCRIBED_CHANNELS_SUCCESS:
+      return {
+        ...state,
+        errorMessage: null,
+        loading: false,
+        subscribed: action.payload,
       }
 
     case channelAction.CREATE_CHANNEL_SUCCESS:
@@ -35,26 +50,13 @@ const channelReducer = (state = INITIAL_STATE, action) => {
         ...state,
         errorMessage: null,
         loading: false,
-        current:
-          state.current.id === action.payload.id
-            ? {
-                ...state.current,
-                name: action.payload.name,
-                description: action.payload.description,
-              }
-            : state.current,
-        all: state.all.map((channel) =>
-          channel.id === action.payload.id
-            ? {
-                ...channel,
-                name: action.payload.name,
-                description: action.payload.description,
-              }
-            : channel
-        ),
+        current: updateChannelIfMatches(state.current, action.payload),
+        subscribed: updateChannelInList(state.subscribed, action.payload),
+        all: updateChannelInList(state.all, action.payload),
       }
 
-    case channelAction.GET_SUBSCRIBED_CHANNELS_FAILURE:
+    case channelAction.LOAD_ALL_CHANNELS_FAILURE:
+    case channelAction.LOAD_SUBSCRIBED_CHANNELS_FAILURE:
     case channelAction.CREATE_CHANNEL_FAILURE:
     case channelAction.UPDATE_CHANNEL_FAILURE:
       return {

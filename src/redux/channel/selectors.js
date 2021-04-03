@@ -7,6 +7,11 @@ export const selectAllChannels = createSelector(
   (channel) => channel.all
 )
 
+export const selectSubscribedChannels = createSelector(
+  [selectChannel],
+  (channel) => channel.subscribed
+)
+
 export const selectCurrentChannel = createSelector(
   selectChannel,
   (channel) => channel.current

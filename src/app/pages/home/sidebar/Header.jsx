@@ -1,27 +1,27 @@
 import React from "react"
 import styled from "styled-components"
 
-import FiberManualRecordIcon from "@material-ui/icons/FiberManualRecord"
-import CreateIcon from "@material-ui/icons/Create"
+import { default as UserStatusIcon } from "@material-ui/icons/FiberManualRecord"
+import { default as CreateNewMessageIcon } from "@material-ui/icons/Create"
 
 const SidebarHeader = ({ workspace, user }) => {
   return (
-    <SidebarHeaderContainer>
-      <SidebarHeaderInfo>
+    <HeaderContainer>
+      <UserLogin>
         <h2>{workspace}</h2>
         <h3>
-          <FiberManualRecordIcon />
+          <UserStatusIcon />
           {user}
         </h3>
-      </SidebarHeaderInfo>
-      <CreateIcon />
-    </SidebarHeaderContainer>
+      </UserLogin>
+      <CreateNewMessageIcon />
+    </HeaderContainer>
   )
 }
 
 export default SidebarHeader
 
-const SidebarHeaderContainer = styled.div`
+const HeaderContainer = styled.div`
   display: flex;
   border-bottom: 1px solid var(--slack-color-lighter);
   padding: 13px;
@@ -35,7 +35,7 @@ const SidebarHeaderContainer = styled.div`
   }
 `
 
-const SidebarHeaderInfo = styled.div`
+const UserLogin = styled.div`
   flex: 1;
 
   > h2 {

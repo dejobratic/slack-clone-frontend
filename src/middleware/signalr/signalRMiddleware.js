@@ -4,8 +4,10 @@ import {
   channelAction,
   createChannelSuccess,
   createChannelFailure,
-  getSubscribedChannelsSuccess,
-  getSubscribedChannelsFailure,
+  loadAllChannelsSuccess,
+  loadAllChannelsFailure,
+  loadSubscribedChannelsSuccess,
+  loadSubscribedChannelsFailure,
   updateChannelSuccess,
   updateChannelFailure,
 } from "redux/channel/actions"
@@ -15,13 +17,12 @@ import {
   addChannelMessageToChat,
   sendChannelMessageSuccess,
   sendChannelMessageFailure,
-  getChannelMessagesSuccess,
-  getChannelMessagesFailure,
+  loadChannelMessagesSuccess,
+  loadChannelMessagesFailure,
 } from "redux/chat/actions"
 
 let hubConnection
 let semaphore = false
-const token = "token"
 
 const getHubConnection = async (store) => {
   if (!hubConnection && !semaphore) {
@@ -34,9 +35,14 @@ const getHubConnection = async (store) => {
 
 export const establishSignalRConnection = async ({ dispatch, getState }) => {
   const hubUrl = process.env.REACT_APP_CHAT_HUB_URL
-  hubConnection = await createSignalRConnection(hubUrl, token)
+  const {
+    userLogin: {
+      currentUser: { token },
+    },
+  } = getState()
+  hubConnection = await createSignalRConnection(hubUrl, token.value)
 
-  hubConnection.on("ReceiveChannelMessage", (message) => {
+  hubConnection.on("ChannelMessageReceived", (message) => {
     const {
       channel: {
         current: { id: channelId },
@@ -48,19 +54,23 @@ export const establishSignalRConnection = async ({ dispatch, getState }) => {
     }
   })
 
-  hubConnection.on("GetChannelMessages", (messages) => {
-    dispatch(getChannelMessagesSuccess(messages))
+  hubConnection.on("ChannelMessagesLoaded", (messages) => {
+    dispatch(loadChannelMessagesSuccess(messages))
   })
 
-  hubConnection.on("GetSubscribedChannels", (channels) => {
-    dispatch(getSubscribedChannelsSuccess(channels))
+  hubConnection.on("AllChannelsLoaded", (channels) => {
+    dispatch(loadAllChannelsSuccess(channels))
   })
 
-  hubConnection.on("CreateChannel", (channel) => {
+  hubConnection.on("SubscribedChannelsLoaded", (channels) => {
+    dispatch(loadSubscribedChannelsSuccess(channels))
+  })
+
+  hubConnection.on("ChannelCreated", (channel) => {
     dispatch(createChannelSuccess(channel))
   })
 
-  hubConnection.on("UpdateChannel", (channel) => {
+  hubConnection.on("ChannelUpdated", (channel) => {
     dispatch(updateChannelSuccess(channel))
   })
 }
@@ -69,10 +79,13 @@ const signalRMiddleware = (store) => (next) => async (action) => {
   next(action)
 
   switch (action?.type) {
-    case channelAction.GET_SUBSCRIBED_CHANNELS_START:
-      return await onGetSubscribedChannels(action, store)
+    case channelAction.LOAD_ALL_CHANNELS_START:
+      return await onLoadAllChannels(action, store)
 
-    case channelAction.GET_SUBSCRIBED_CHANNELS_SUCCESS:
+    case channelAction.LOAD_SUBSCRIBED_CHANNELS_START:
+      return await onLoadSubscribedChannels(action, store)
+
+    case channelAction.LOAD_SUBSCRIBED_CHANNELS_SUCCESS:
       return await onJoinSubscribedChannels(action, store)
 
     case channelAction.CREATE_CHANNEL_START:
@@ -87,20 +100,29 @@ const signalRMiddleware = (store) => (next) => async (action) => {
     case chatAction.SEND_CHANNEL_MESSAGE_START:
       return await onSendChannelMessage(action, store)
 
-    case chatAction.GET_CHANNEL_MESSAGES_START:
-      return await onGetChannelMessages(action, store)
+    case chatAction.LOAD_CHANNEL_MESSAGES_START:
+      return await onLoadChannelMessages(action, store)
 
     default:
       break
   }
 }
 
-const onGetSubscribedChannels = async (action, store) => {
+const onLoadAllChannels = async (action, store) => {
   try {
     const hubConnection = await getHubConnection(store)
-    await hubConnection.invoke("GetSubscribedChannels", action.payload)
+    await hubConnection.invoke("LoadAllChannels", action.payload)
   } catch (error) {
-    store.dispatch(getSubscribedChannelsFailure(error.message))
+    store.dispatch(loadAllChannelsFailure(error.message))
+  }
+}
+
+const onLoadSubscribedChannels = async (action, store) => {
+  try {
+    const hubConnection = await getHubConnection(store)
+    await hubConnection.invoke("LoadSubscribedChannels", action.payload)
+  } catch (error) {
+    store.dispatch(loadSubscribedChannelsFailure(error.message))
   }
 }
 
@@ -121,11 +143,7 @@ const onSendChannelMessage = async (action, store) => {
     const { channelId } = action.payload
 
     const hubConnection = await getHubConnection(store)
-    await hubConnection.invoke(
-      "SendMessageToChannel",
-      channelId,
-      action.payload
-    )
+    await hubConnection.invoke("SendChannelMessage", channelId, action.payload)
 
     store.dispatch(sendChannelMessageSuccess())
   } catch (error) {
@@ -161,12 +179,12 @@ const onUpdateChannel = async (action, store) => {
   }
 }
 
-const onGetChannelMessages = async (action, store) => {
+const onLoadChannelMessages = async (action, store) => {
   try {
     const hubConnection = await getHubConnection(store)
-    await hubConnection.invoke("GetChannelMessages", action.payload)
+    await hubConnection.invoke("LoadChannelMessages", action.payload)
   } catch (error) {
-    store.dispatch(getChannelMessagesFailure(error.message))
+    store.dispatch(loadChannelMessagesFailure(error.message))
   }
 }
 

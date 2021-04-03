@@ -1,5 +1,6 @@
 import React from "react"
 import { useDispatch, useSelector } from "react-redux"
+import { useHistory } from "react-router-dom"
 import styled, { css } from "styled-components"
 
 import { openChannel } from "redux/channel/actions"
@@ -7,27 +8,32 @@ import { selectCurrentChannel } from "redux/channel/selectors"
 
 const SidebarChannel = ({ id, name, selected }) => {
   const dispatch = useDispatch()
+  const history = useHistory()
   const currentChannel = useSelector(selectCurrentChannel)
 
   const handleOpenChannel = () => {
     if (currentChannel?.id !== id) {
       dispatch(openChannel(id))
     }
+
+    if (history?.location?.pathname !== "/") {
+      history.push("/")
+    }
   }
 
   return (
-    <SidebarChannelContainer selected={selected} onClick={handleOpenChannel}>
+    <ChannelContainer selected={selected} onClick={handleOpenChannel}>
       <h3>
         <span>#</span>
         {name}
       </h3>
-    </SidebarChannelContainer>
+    </ChannelContainer>
   )
 }
 
 export default SidebarChannel
 
-const SidebarChannelContainer = styled.div.attrs(({ selected }) => ({
+const ChannelContainer = styled.div.attrs(({ selected }) => ({
   textColor: selected ? "--text-color" : "--text-color-darker",
   backgroundColor: selected ? "--active-item-color" : "--slack-color",
 }))`

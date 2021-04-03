@@ -12,14 +12,14 @@ const chatReducer = (state = INITIAL_STATE, action) => {
     case chatAction.SEND_CHANNEL_MESSAGE_SUCCESS:
       return { ...state, errorMessage: null }
 
-    case chatAction.GET_CHANNEL_MESSAGES_START:
+    case chatAction.LOAD_CHANNEL_MESSAGES_START:
       return { ...state, loading: true }
 
-    case chatAction.GET_CHANNEL_MESSAGES_SUCCESS:
+    case chatAction.LOAD_CHANNEL_MESSAGES_SUCCESS:
       return { ...state, messages: action.payload, loading: false }
 
     case chatAction.SEND_CHANNEL_MESSAGE_FAILURE:
-    case chatAction.GET_CHANNEL_MESSAGES_FAILURE:
+    case chatAction.LOAD_CHANNEL_MESSAGES_FAILURE:
       return { ...state, errorMessage: action.payload }
 
     case chatAction.ADD_CHANNEL_MESSAGE_TO_CHAT:

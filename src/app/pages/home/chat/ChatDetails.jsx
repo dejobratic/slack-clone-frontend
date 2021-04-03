@@ -2,11 +2,11 @@ import React, { useState } from "react"
 import { useDispatch } from "react-redux"
 import styled from "styled-components"
 
-import StarBorderOutlinedIcon from "@material-ui/icons/StarBorderOutlined"
-import InfoOutlinedIcon from "@material-ui/icons/InfoOutlined"
+import { default as AddToFavoritesIcon } from "@material-ui/icons/StarBorderOutlined"
+import { default as DetailsIcon } from "@material-ui/icons/InfoOutlined"
 
 import { updateChannel } from "redux/channel/actions"
-import UpdateDescriptionModal from "./UpdateChannelDescriptionModal"
+import UpdateDescriptionModal from "app/pages/home/chat/UpdateChannelDescriptionModal"
 
 const ChatDetails = ({ channel }) => {
   const dispatch = useDispatch()
@@ -24,14 +24,14 @@ const ChatDetails = ({ channel }) => {
   }
 
   return (
-    <ChatDetailsContainer>
+    <>
       <ChatHeaderContainer>
         <ChatHeaderLeft>
           <ChannelNameContainer>
             <h4>
               <strong>#{name}</strong>
             </h4>
-            <StarBorderOutlinedIcon />
+            <AddToFavoritesIcon />
           </ChannelNameContainer>
           <ChannelDescriptionContainer>
             <p onClick={toggleShowModal}>
@@ -40,7 +40,7 @@ const ChatDetails = ({ channel }) => {
           </ChannelDescriptionContainer>
         </ChatHeaderLeft>
         <ChatHeaderRight>
-          <InfoOutlinedIcon />
+          <DetailsIcon />
         </ChatHeaderRight>
       </ChatHeaderContainer>
 
@@ -49,13 +49,11 @@ const ChatDetails = ({ channel }) => {
         onClose={toggleShowModal}
         onSubmit={handleUpdateDescription}
       />
-    </ChatDetailsContainer>
+    </>
   )
 }
 
 export default ChatDetails
-
-const ChatDetailsContainer = styled.div``
 
 const ChatHeaderContainer = styled.div`
   grid-row: 1;

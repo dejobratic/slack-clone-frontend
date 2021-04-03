@@ -3,9 +3,9 @@ export const chatAction = {
   SEND_CHANNEL_MESSAGE_SUCCESS: "SEND_CHANNEL_MESSAGE_SUCCESS",
   SEND_CHANNEL_MESSAGE_FAILURE: "SEND_CHANNEL_MESSAGE_FAILURE",
 
-  GET_CHANNEL_MESSAGES_START: "GET_CHANNEL_MESSAGES_START",
-  GET_CHANNEL_MESSAGES_SUCCESS: "GET_CHANNEL_MESSAGES_SUCCESS",
-  GET_CHANNEL_MESSAGES_FAILURE: "GET_CHANNEL_MESSAGES_FAILURE",
+  LOAD_CHANNEL_MESSAGES_START: "LOAD_CHANNEL_MESSAGES_START",
+  LOAD_CHANNEL_MESSAGES_SUCCESS: "LOAD_CHANNEL_MESSAGES_SUCCESS",
+  LOAD_CHANNEL_MESSAGES_FAILURE: "LOAD_CHANNEL_MESSAGES_FAILURE",
 
   ADD_CHANNEL_MESSAGE_TO_CHAT: "ADD_CHANNEL_MESSAGE_TO_CHAT",
 }
@@ -24,18 +24,18 @@ export const sendChannelMessageFailure = (errorMessage) => ({
   payload: errorMessage,
 })
 
-export const getChannelMessages = (specification) => ({
-  type: chatAction.GET_CHANNEL_MESSAGES_START,
+export const loadChannelMessages = (specification) => ({
+  type: chatAction.LOAD_CHANNEL_MESSAGES_START,
   payload: specification,
 })
 
-export const getChannelMessagesSuccess = (messages) => ({
-  type: chatAction.GET_CHANNEL_MESSAGES_SUCCESS,
+export const loadChannelMessagesSuccess = (messages) => ({
+  type: chatAction.LOAD_CHANNEL_MESSAGES_SUCCESS,
   payload: messages,
 })
 
-export const getChannelMessagesFailure = (errorMessage) => ({
-  type: chatAction.GET_CHANNEL_MESSAGES_FAILURE,
+export const loadChannelMessagesFailure = (errorMessage) => ({
+  type: chatAction.LOAD_CHANNEL_MESSAGES_FAILURE,
   payload: errorMessage,
 })
 

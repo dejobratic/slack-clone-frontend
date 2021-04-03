@@ -1,7 +1,7 @@
 import React from "react"
 import { useSelector } from "react-redux"
 
-import SidebarChannel from "app/pages/home/sidebar/SidebarChannel"
+import Channel from "app/pages/home/sidebar/Channel"
 
 import { selectCurrentChannel } from "redux/channel/selectors"
 
@@ -13,14 +13,14 @@ const SidebarChannelList = ({ header, channels, collapsed }) => {
       {header}
       {!collapsed &&
         channels.map((channel) => (
-          <SidebarChannel
+          <Channel
             key={channel.id}
             {...channel}
             selected={currentChannel?.id === channel.id}
           />
         ))}
       {collapsed && currentChannel && (
-        <SidebarChannel key={currentChannel.id} {...currentChannel} selected />
+        <Channel key={currentChannel.id} {...currentChannel} selected />
       )}
     </>
   )

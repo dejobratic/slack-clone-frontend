@@ -7,8 +7,8 @@ import { default as UserRegistrationPage } from "app/pages/user-registration/Use
 const App = () => {
   return (
     <>
-      <Route path="/login" component={UserRegistrationPage} />
-      <Route exact path="/" component={HomePage} />
+      <Route exact path="/login" component={UserRegistrationPage} />
+      <Route path="/" component={HomePage} />
     </>
   )
 }

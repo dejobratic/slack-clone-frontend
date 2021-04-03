@@ -5,13 +5,13 @@ import styled, { css } from "styled-components"
 import AddIcon from "@material-ui/icons/Add"
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore"
 
-import SidebarHeader from "app/pages/home/sidebar/SidebarHeader"
-import SidebarMenu from "app/pages/home/sidebar/SidebarMenu"
-import SidebarChannelList from "app/pages/home/sidebar/SidebarChannelList"
+import SidebarHeader from "app/pages/home/sidebar/Header"
+import SidebarMenu from "app/pages/home/sidebar/Menu"
+import SidebarChannelList from "app/pages/home/sidebar/ChannelList"
 import SidebarItem from "app/pages/home/sidebar/SidebarItem"
-import CreateChannelModal from "app/pages/home/sidebar/CreateChannelModal"
+import CreateChannelModal from "app/pages/home/components/create-channel-modal/CreateChannelModal"
 
-import { getSubscribedChannels, createChannel } from "redux/channel/actions"
+import { loadSubscribedChannels, createChannel } from "redux/channel/actions"
 import { selectAllChannels } from "redux/channel/selectors"
 import { selectCurrentUser } from "redux/user-login/selectors"
 
@@ -27,7 +27,7 @@ const Sidebar = () => {
   const toggleSidebarCollapsed = () => setSidebarCollapsed(!sidebarCollapsed)
 
   useEffect(() => {
-    dispatch(getSubscribedChannels())
+    dispatch(loadSubscribedChannels())
   }, [dispatch])
 
   const handleCreateChannel = (channel) => {

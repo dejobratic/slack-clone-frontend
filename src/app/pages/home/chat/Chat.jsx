@@ -37,6 +37,7 @@ export default Chat
 const ChatMessageList = styled.div`
   grid-column: 2;
   grid-row: 2;
+
   padding: 0 1em;
   overflow-y: scroll;
 
