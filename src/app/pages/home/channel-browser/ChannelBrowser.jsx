@@ -1,14 +1,20 @@
-import React from "react"
-import { useSelector } from "react-redux"
+import React, { useEffect } from "react"
+import { useDispatch, useSelector } from "react-redux"
 import styled from "styled-components"
 
 import ChannelBrowserHeader from "app/pages/home/channel-browser/ChannelBrowserHeader"
 import Channel from "app/pages/home/channel-browser/Channel"
 
+import { loadAllChannels } from "redux/channel/actions"
 import { selectAllChannels } from "redux/channel/selectors"
 
 const ChannelBrowser = () => {
+  const dispatch = useDispatch()
   const channels = useSelector(selectAllChannels)
+
+  useEffect(() => {
+    dispatch(loadAllChannels())
+  }, [dispatch])
 
   return (
     <>

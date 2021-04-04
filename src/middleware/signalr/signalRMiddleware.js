@@ -1,15 +1,20 @@
+import AwaitLock from "await-lock"
 import { createSignalRConnection } from "middleware/signalr/signalR"
 
 import {
   channelAction,
-  createChannelSuccess,
-  createChannelFailure,
   loadAllChannelsSuccess,
   loadAllChannelsFailure,
   loadSubscribedChannelsSuccess,
   loadSubscribedChannelsFailure,
+  createChannelSuccess,
+  createChannelFailure,
   updateChannelSuccess,
   updateChannelFailure,
+  subscribeToChannelSuccess,
+  subscribeToChannelFailure,
+  unsubscribeFromChannelSuccess,
+  unsubscribeFromChannelFailure,
 } from "redux/channel/actions"
 
 import {
@@ -22,14 +27,19 @@ import {
 } from "redux/chat/actions"
 
 let hubConnection
-let semaphore = false
+let lock = new AwaitLock()
 
-const getHubConnection = async (store) => {
-  if (!hubConnection && !semaphore) {
-    semaphore = true
-    await establishSignalRConnection(store)
+async function getHubConnection(store) {
+  if (!hubConnection) {
+    await lock.acquireAsync()
+    try {
+      if (!hubConnection) {
+        await establishSignalRConnection(store)
+      }
+    } finally {
+      lock.release()
+    }
   }
-
   return hubConnection
 }
 
@@ -66,8 +76,26 @@ export const establishSignalRConnection = async ({ dispatch, getState }) => {
     dispatch(loadSubscribedChannelsSuccess(channels))
   })
 
+  hubConnection.on("SubscriberAddedToChannel", (channel) => {
+    dispatch(subscribeToChannelSuccess(channel))
+  })
+
+  hubConnection.on("SubscriberRemovedFromChannel", (channel) => {
+    dispatch(unsubscribeFromChannelSuccess(channel))
+  })
+
   hubConnection.on("ChannelCreated", (channel) => {
+    const {
+      userLogin: {
+        currentUser: { id: userId },
+      },
+    } = getState()
+
     dispatch(createChannelSuccess(channel))
+
+    if (userId === channel.creatorId) {
+      dispatch(subscribeToChannelSuccess(channel))
+    }
   })
 
   hubConnection.on("ChannelUpdated", (channel) => {
@@ -88,11 +116,21 @@ const signalRMiddleware = (store) => (next) => async (action) => {
     case channelAction.LOAD_SUBSCRIBED_CHANNELS_SUCCESS:
       return await onJoinSubscribedChannels(action, store)
 
+    case channelAction.SUBSCRIBE_TO_CHANNEL_START:
+      return await onSubscribeToChannel(action, store)
+
+    case channelAction.UNSUBSCRIBE_FROM_CHANNEL_START:
+      return await onUnsubscribeFromChannel(action, store)
+
     case channelAction.CREATE_CHANNEL_START:
       return await onCreateChannel(action, store)
 
     case channelAction.CREATE_CHANNEL_SUCCESS:
-      return await onJoinCreatedChannel(action, store)
+    case channelAction.SUBSCRIBE_TO_CHANNEL_SUCCESS:
+      return await onAddConnectionToGroup(action, store)
+
+    case channelAction.UNSUBSCRIBE_FROM_CHANNEL_SUCCESS:
+      return await onRemoveConnectionFromGroup(action, store)
 
     case channelAction.UPDATE_CHANNEL_START:
       return await onUpdateChannel(action, store)
@@ -119,8 +157,9 @@ const onLoadAllChannels = async (action, store) => {
 
 const onLoadSubscribedChannels = async (action, store) => {
   try {
+    const { payload: subscriberId } = action
     const hubConnection = await getHubConnection(store)
-    await hubConnection.invoke("LoadSubscribedChannels", action.payload)
+    await hubConnection.invoke("LoadSubscribedChannels", { subscriberId })
   } catch (error) {
     store.dispatch(loadSubscribedChannelsFailure(error.message))
   }
@@ -129,12 +168,28 @@ const onLoadSubscribedChannels = async (action, store) => {
 const onJoinSubscribedChannels = async (action, store) => {
   try {
     const { payload: channels } = action
-
-    const hubConnection = await getHubConnection(store)
-    for (const channel of channels)
-      await hubConnection.invoke("JoinChannel", channel.id)
+    for (const channel of channels) {
+      await onAddConnectionToGroup({ payload: channel }, store)
+    }
   } catch (error) {
     console.log(error)
+  }
+}
+
+const onSubscribeToChannel = async (action, store) => {
+  try {
+    const hubConnection = await getHubConnection(store)
+    await hubConnection.invoke("AddSubscriberToChannel", action.payload)
+  } catch (error) {
+    store.dispatch(subscribeToChannelFailure(error.message))
+  }
+}
+const onUnsubscribeFromChannel = async (action, store) => {
+  try {
+    const hubConnection = await getHubConnection(store)
+    await hubConnection.invoke("RemoveSubscriberFromChannel", action.payload)
+  } catch (error) {
+    store.dispatch(unsubscribeFromChannelFailure(error.message))
   }
 }
 
@@ -160,11 +215,21 @@ const onCreateChannel = async (action, store) => {
   }
 }
 
-const onJoinCreatedChannel = async (action, store) => {
+const onAddConnectionToGroup = async (action, store) => {
   try {
     const { payload: channel } = action
     const hubConnection = await getHubConnection(store)
-    await hubConnection.invoke("JoinChannel", channel.id)
+    await hubConnection.invoke("AddToGroup", channel.id)
+  } catch (error) {
+    console.log(action, error)
+  }
+}
+
+const onRemoveConnectionFromGroup = async (action, store) => {
+  try {
+    const { payload: channel } = action
+    const hubConnection = await getHubConnection(store)
+    await hubConnection.invoke("RemoveFromGroup", channel.id)
   } catch (error) {
     console.log(error)
   }

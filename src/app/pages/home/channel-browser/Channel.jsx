@@ -1,12 +1,28 @@
 import React from "react"
-import { useDispatch } from "react-redux"
+import { useDispatch, useSelector } from "react-redux"
 import styled from "styled-components"
-
-import StarBorderOutlinedIcon from "@material-ui/icons/StarBorderOutlined"
 
 import Button from "app/components/button/Button"
 
-const Channel = ({ name, description }) => {
+import {
+  subscribeToChannel,
+  unsubscribeFromChannel,
+} from "redux/channel/actions"
+import { selectCurrentUser } from "redux/user-login/selectors"
+
+const Channel = ({ id: channelId, name, description, subscriberIds }) => {
+  const dispatch = useDispatch()
+
+  const { id: subscriberId } = useSelector(selectCurrentUser)
+  const subscribed = subscriberIds.includes(subscriberId)
+
+  const handleUnsubscribeFromChannel = () => {
+    dispatch(unsubscribeFromChannel({ channelId, subscriberId }))
+  }
+  const handleSubscribeToChannel = () => {
+    dispatch(subscribeToChannel({ channelId, subscriberId }))
+  }
+
   return (
     <ChannelContainer>
       <Details>
@@ -14,12 +30,23 @@ const Channel = ({ name, description }) => {
           <h4>
             <strong>#{name}</strong>
           </h4>
-          <StarBorderOutlinedIcon />
         </Name>
-        <Description>{description}</Description>
+        <Description>
+          {subscribed && <span>Joined</span>}
+          {subscribed && description && ` | `}
+          {description}
+        </Description>
       </Details>
       <Actions>
-        <Button>AAA</Button>
+        {subscribed ? (
+          <Button variant="basic" onClick={handleUnsubscribeFromChannel}>
+            Leave
+          </Button>
+        ) : (
+          <Button variant="primary" onClick={handleSubscribeToChannel}>
+            Join
+          </Button>
+        )}
       </Actions>
     </ChannelContainer>
   )
@@ -35,7 +62,7 @@ const ChannelContainer = styled.div`
   grid-template-columns: 1fr 1fr;
 
   padding: 15px;
-  margin-top: 40px;
+  min-height: 45px;
   border-bottom: 1px solid lightgray;
 `
 
@@ -53,22 +80,14 @@ const Name = styled.div`
     text-transform: lowercase;
     margin-right: 10px;
   }
-
-  > h4 > .MuiSvgIcon-root {
-    margin-left: 20px;
-    font-size: 18px;
-  }
 `
 
 const Description = styled.div`
   color: var(--text-color-darker);
 
-  > p > span {
-    cursor: pointer;
-  }
-
-  > p > span:hover {
-    text-decoration: underline;
+  > span {
+    color: var(--green-color);
+    font-weight: bold;
   }
 `
 

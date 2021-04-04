@@ -16,6 +16,14 @@ export const channelAction = {
   UPDATE_CHANNEL_FAILURE: "UPDATE_CHANNEL_FAILURE",
 
   OPEN_CHANNEL: "OPEN_CHANNEL",
+
+  SUBSCRIBE_TO_CHANNEL_START: "SUBSCRIBE_TO_CHANNEL_START",
+  SUBSCRIBE_TO_CHANNEL_SUCCESS: "SUBSCRIBE_TO_CHANNEL_SUCCESS",
+  SUBSCRIBE_TO_CHANNEL_FAILURE: "SUBSCRIBE_TO_CHANNEL_FAILURE",
+
+  UNSUBSCRIBE_FROM_CHANNEL_START: "UNSUBSCRIBE_FROM_CHANNEL_START",
+  UNSUBSCRIBE_FROM_CHANNEL_SUCCESS: "UNSUBSCRIBE_FROM_CHANNEL_SUCCESS",
+  UNSUBSCRIBE_FROM_CHANNEL_FAILURE: "UNSUBSCRIBE_FROM_CHANNEL_FAILURE",
 }
 
 export const loadAllChannels = () => ({
@@ -33,9 +41,9 @@ export const loadAllChannelsFailure = (errorMessage) => ({
   payload: errorMessage,
 })
 
-export const loadSubscribedChannels = () => ({
+export const loadSubscribedChannels = (subscriberId) => ({
   type: channelAction.LOAD_SUBSCRIBED_CHANNELS_START,
-  payload: {},
+  payload: subscriberId,
 })
 
 export const loadSubscribedChannelsSuccess = (channels) => ({
@@ -81,4 +89,34 @@ export const updateChannelFailure = (errorMessage) => ({
 export const openChannel = (channelId) => ({
   type: channelAction.OPEN_CHANNEL,
   payload: channelId,
+})
+
+export const subscribeToChannel = (channelIdAndSubscriberId) => ({
+  type: channelAction.SUBSCRIBE_TO_CHANNEL_START,
+  payload: channelIdAndSubscriberId,
+})
+
+export const subscribeToChannelSuccess = (channel) => ({
+  type: channelAction.SUBSCRIBE_TO_CHANNEL_SUCCESS,
+  payload: channel,
+})
+
+export const subscribeToChannelFailure = (errorMessage) => ({
+  type: channelAction.SUBSCRIBE_TO_CHANNEL_FAILURE,
+  payload: errorMessage,
+})
+
+export const unsubscribeFromChannel = (channelIdAndSubscriberId) => ({
+  type: channelAction.UNSUBSCRIBE_FROM_CHANNEL_START,
+  payload: channelIdAndSubscriberId,
+})
+
+export const unsubscribeFromChannelSuccess = (channel) => ({
+  type: channelAction.UNSUBSCRIBE_FROM_CHANNEL_SUCCESS,
+  payload: channel,
+})
+
+export const unsubscribeFromChannelFailure = (errorMessage) => ({
+  type: channelAction.UNSUBSCRIBE_FROM_CHANNEL_FAILURE,
+  payload: errorMessage,
 })

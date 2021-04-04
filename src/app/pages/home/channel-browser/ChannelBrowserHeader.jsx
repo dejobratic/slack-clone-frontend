@@ -1,26 +1,13 @@
 import React, { useState } from "react"
-import { useDispatch, useSelector } from "react-redux"
 import styled from "styled-components"
 
 import Button from "app/components/button/Button"
 import CreateChannelModal from "app/pages/home/components/create-channel-modal/CreateChannelModal"
 
-import { createChannel } from "redux/channel/actions"
-import { selectCurrentUser } from "redux/user-login/selectors"
-
 const ChannelBrowserHeader = () => {
-  const dispatch = useDispatch()
-  const currentUser = useSelector(selectCurrentUser)
-
   const [showModal, setShowModal] = useState(false)
 
   const toggleShowModal = () => setShowModal(!showModal)
-
-  const handleCreateChannel = (channel) => {
-    if (channel?.name) {
-      dispatch(createChannel({ ...channel, creatorId: currentUser.Id }))
-    }
-  }
 
   return (
     <>
@@ -33,11 +20,7 @@ const ChannelBrowserHeader = () => {
         </ChannelBrowserHeaderRight>
       </ChannelBrowserHeaderContainer>
 
-      <CreateChannelModal
-        shown={showModal}
-        onClose={toggleShowModal}
-        onSubmit={handleCreateChannel}
-      />
+      <CreateChannelModal shown={showModal} onClose={toggleShowModal} />
     </>
   )
 }

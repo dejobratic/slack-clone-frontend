@@ -1,16 +1,25 @@
 import React, { useState } from "react"
+import { useDispatch, useSelector } from "react-redux"
 
 import Modal from "app/components/modal/Modal"
 import TextInput from "app/components/text-input/TextInput"
 import Button from "app/components/button/Button"
 
-const CreateChannelModal = ({ shown, onClose, onSubmit }) => {
+import { createChannel } from "redux/channel/actions"
+import { selectCurrentUser } from "redux/user-login/selectors"
+
+const CreateChannelModal = ({ shown, onClose }) => {
+  const dispatch = useDispatch()
+  const { id: creatorId } = useSelector(selectCurrentUser)
+
   const [name, setName] = useState(null)
   const [description, setDescription] = useState(null)
 
-  const handleOnSubmit = () => {
-    onSubmit({ name, description })
-    handleOnClose()
+  const handleCreateChannel = () => {
+    if (name) {
+      dispatch(createChannel({ name, description, creatorId }))
+      handleOnClose()
+    }
   }
 
   const handleOnClose = () => {
@@ -46,7 +55,7 @@ const CreateChannelModal = ({ shown, onClose, onSubmit }) => {
         </>
       }
       actions={
-        <Button onClick={handleOnSubmit} variant="primary">
+        <Button onClick={handleCreateChannel} variant="primary">
           Create
         </Button>
       }

@@ -1,7 +1,7 @@
-import { createStore, applyMiddleware } from "redux"
+import { createStore, applyMiddleware, compose } from "redux"
 import { persistStore } from "redux-persist"
 import createSagaMiddleware from "redux-saga"
-import { composeWithDevTools } from "redux-devtools-extension"
+// import { composeWithDevTools } from "redux-devtools-extension"
 
 import signalRMiddleware from "middleware/signalr/signalRMiddleware"
 
@@ -11,9 +11,17 @@ import rootSaga from "redux/root-saga"
 const sagaMiddleware = createSagaMiddleware()
 const allMiddleware = [sagaMiddleware, signalRMiddleware]
 
+const composeEnhancers =
+  (window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ &&
+    window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__({
+      trace: true,
+      traceLimit: 25,
+    })) ||
+  compose
+
 const store = createStore(
   rootReducer,
-  composeWithDevTools(applyMiddleware(...allMiddleware))
+  composeEnhancers(applyMiddleware(...allMiddleware))
 )
 
 sagaMiddleware.run(rootSaga)

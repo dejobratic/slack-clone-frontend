@@ -3,6 +3,8 @@ import { channelAction } from "redux/channel/actions"
 import {
   updateChannelIfMatches,
   updateChannelInList,
+  addChannelToList,
+  removeChannelFromList,
 } from "redux/channel/utils"
 
 const INITIAL_STATE = {
@@ -17,6 +19,8 @@ const channelReducer = (state = INITIAL_STATE, action) => {
   switch (action.type) {
     case channelAction.LOAD_ALL_CHANNELS_START:
     case channelAction.LOAD_SUBSCRIBED_CHANNELS_START:
+    case channelAction.SUBSCRIBE_TO_CHANNEL_START:
+    case channelAction.UNSUBSCRIBE_FROM_CHANNEL_START:
     case channelAction.CREATE_CHANNEL_START:
     case channelAction.UPDATE_CHANNEL_START:
       return { ...state, errorMessage: null, loading: true }
@@ -35,6 +39,22 @@ const channelReducer = (state = INITIAL_STATE, action) => {
         errorMessage: null,
         loading: false,
         subscribed: action.payload,
+      }
+
+    case channelAction.SUBSCRIBE_TO_CHANNEL_SUCCESS:
+      return {
+        ...state,
+        errorMessage: null,
+        subscribed: addChannelToList(state.subscribed, action.payload),
+        all: updateChannelInList(state.all, action.payload),
+      }
+
+    case channelAction.UNSUBSCRIBE_FROM_CHANNEL_SUCCESS:
+      return {
+        ...state,
+        errorMessage: null,
+        subscribed: removeChannelFromList(state.subscribed, action.payload),
+        all: updateChannelInList(state.all, action.payload),
       }
 
     case channelAction.CREATE_CHANNEL_SUCCESS:
@@ -57,6 +77,8 @@ const channelReducer = (state = INITIAL_STATE, action) => {
 
     case channelAction.LOAD_ALL_CHANNELS_FAILURE:
     case channelAction.LOAD_SUBSCRIBED_CHANNELS_FAILURE:
+    case channelAction.SUBSCRIBE_TO_CHANNEL_FAILURE:
+    case channelAction.UNSUBSCRIBE_FROM_CHANNEL_FAILURE:
     case channelAction.CREATE_CHANNEL_FAILURE:
     case channelAction.UPDATE_CHANNEL_FAILURE:
       return {
@@ -70,7 +92,9 @@ const channelReducer = (state = INITIAL_STATE, action) => {
         ...state,
         errorMessage: null,
         loading: false,
-        current: state.all.find((channel) => channel.id === action.payload),
+        current: state.subscribed.find(
+          (channel) => channel.id === action.payload
+        ),
       }
 
     default:

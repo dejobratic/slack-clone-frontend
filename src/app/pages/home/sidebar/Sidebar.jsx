@@ -11,14 +11,14 @@ import SidebarChannelList from "app/pages/home/sidebar/ChannelList"
 import SidebarItem from "app/pages/home/sidebar/SidebarItem"
 import CreateChannelModal from "app/pages/home/components/create-channel-modal/CreateChannelModal"
 
-import { loadSubscribedChannels, createChannel } from "redux/channel/actions"
-import { selectAllChannels } from "redux/channel/selectors"
+import { loadSubscribedChannels } from "redux/channel/actions"
+import { selectSubscribedChannels } from "redux/channel/selectors"
 import { selectCurrentUser } from "redux/user-login/selectors"
 
 const Sidebar = () => {
   const dispatch = useDispatch()
-  const channels = useSelector(selectAllChannels)
   const currentUser = useSelector(selectCurrentUser)
+  const subscribedChannels = useSelector(selectSubscribedChannels)
 
   const [showModal, setShowModal] = useState(false)
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false)
@@ -27,14 +27,8 @@ const Sidebar = () => {
   const toggleSidebarCollapsed = () => setSidebarCollapsed(!sidebarCollapsed)
 
   useEffect(() => {
-    dispatch(loadSubscribedChannels())
-  }, [dispatch])
-
-  const handleCreateChannel = (channel) => {
-    if (channel?.name) {
-      dispatch(createChannel({ ...channel, creatorId: currentUser.Id }))
-    }
-  }
+    dispatch(loadSubscribedChannels(currentUser.id))
+  }, [dispatch, currentUser])
 
   return (
     <>
@@ -57,16 +51,12 @@ const Sidebar = () => {
               RightIcon={<AddIcon onClick={toggleShowModal} />}
             />
           }
-          channels={channels}
+          channels={subscribedChannels}
           collapsed={sidebarCollapsed}
         />
       </SidebarContainer>
 
-      <CreateChannelModal
-        shown={showModal}
-        onClose={toggleShowModal}
-        onSubmit={handleCreateChannel}
-      />
+      <CreateChannelModal shown={showModal} onClose={toggleShowModal} />
     </>
   )
 }
